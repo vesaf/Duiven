@@ -7,6 +7,7 @@
 var app = require('../app');
 var debug = require('debug')('node:server');
 var http = require('http');
+var nodeCmd = require('node-cmd');
 
 /**
  * Create HTTP server.
@@ -17,11 +18,11 @@ var server = http.createServer(app);
 /**
  * Listen on provided port, on all network interfaces.
  */
-
-server.listen(80, "192.168.1.144");
-server.on('error', onError);
-server.on('listening', onListening);
-
+getIPv4(function (IPv4) {
+  server.listen(80, IPv4);
+  server.on('error', onError);
+  server.on('listening', onListening);
+});
 
 /**
  * Event listener for HTTP server "error" event.
@@ -61,4 +62,15 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
+}
+
+/**
+ * Extract IPv4 address from cmd command ipconfig.
+ */
+function getIPv4(callback) {
+  nodeCmd.get('ipconfig', function (err, data, stderr) {
+    var secondPart = data.substr(data.indexOf("IPv4 Address. . . . . . . . . . . : ") + 36, data.length);
+    var IPv4 = secondPart.substr(0, secondPart.indexOf(" ") - 2)
+    callback(IPv4);
+  });
 }
