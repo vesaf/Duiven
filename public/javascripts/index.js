@@ -17,13 +17,20 @@ document.addEventListener("DOMContentLoaded", function () {
         listContent += "<li class='card' id='couple' " + i + "><div class='listItem'>" + 
             "<p class='coupleName'>" + couple.name + "</p><table><tr>" + 
             "<td class='date1Label'> Legdatum eerste ei: " + formatDate(couple.date1) + "</td>" + 
-            "<td class='date2Label'> Legdatum tweede ei: " + formatDate(addDays(couple.date1, 2)) + "</td></tr>" + 
+			"<td><i class='fa fa-check'></i></td>" +
+            "<td class='date2Label'> Legdatum tweede ei: " + formatDate(addDays(couple.date1, 2)) + "</td></tr>" +
             "<tr><td class='date3Label'> Uitkomst datum: " + formatDate(addDays(couple.date1, 18)) + "</td>" + 
             "<td class='date4Label'> Ringdatum: " + formatDate(addDays(couple.date1, 25)) + "</td></tr>" + 
             "</table></div></li>";
     }
     var list = document.getElementById("mainList");
     list.innerHTML = listContent;
+	
+	var addButton = document.getElementById("addButton");
+	console.log(addButton);
+	document.addEventListener("click", function (e) {
+		if (isHeaderButton(e.target) || isHeaderButton(e.target.parentElement)) window.open("./addCouple.html", "_self");
+	});
 }, false);
 
 function addDays(date = new Date(), days) {
@@ -42,3 +49,7 @@ function formatDate(date = new Date()) {
   
     return `${day}/${month}/${year}`;
 } 
+
+function isHeaderButton (element) {
+	return (element.classList.contains("header-button"));
+}

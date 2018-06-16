@@ -8,6 +8,8 @@ html,body{
     font-family: Verdana,sans-serif;
     font-size: 15px;
     line-height: 1.5;
+	-webkit-tap-highlight-color: transparent;
+	user-select: none;
 }
 
 html{
@@ -23,6 +25,8 @@ body {
 
 header {
     position: fixed;
+	top: 0;
+	left: 0;
     width: 100%;
     color: #fff !important;
     background-color: #f54236 !important;
@@ -40,6 +44,32 @@ header {
     clear: both;
 }
 
+.form {
+	margin: 90px 0;
+}
+
+input {
+	display: block;
+	margin: 10px 0;
+	background: transparent;
+	border-top: 0;
+	border-left: 0;
+	border-right: 0;
+	border-bottom: 2px solid #d1d1d1;
+	padding: 3px;
+	width: 100%;
+}
+
+button {
+	border: 1px solid #000000;
+	background-color: #d1d1d1;
+	box-shadow: none;
+	border-radius: 0px;
+	padding: 7px;
+	font: 1.2em;
+	cursor: pointer;
+}
+
 li {
     padding: 8px 16px;
     width: 100%;
@@ -55,8 +85,20 @@ ul {
     margin: 90px 0;
 }
 
+.header-button {
+	position: fixed;
+	right: 20px;
+	font-size: 25px;
+	top: 20px;
+	cursor: pointer;
+}
+
+.cover {
+	
+}
+
 h1 {
-    font-size: 36px;
+    /* font-size: 36px; */
     margin: 0.4em 0;
 }
 
