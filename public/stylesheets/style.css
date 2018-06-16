@@ -17,7 +17,7 @@ html{
 }
 
 body {
-    background-color: #3695e4;
+    background-color: #e4e4e4;
     margin: 0;
 }
 
@@ -45,6 +45,8 @@ li {
     width: 100%;
     border: 1px solid black;
     margin: 3px 0;
+    background-color: #d1d1d1;
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,0.16),0 1px 5px 0 rgba(0,0,0,0.12);
 }
 
 ul {

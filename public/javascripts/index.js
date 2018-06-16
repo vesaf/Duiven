@@ -14,13 +14,13 @@ document.addEventListener("DOMContentLoaded", function () {
     console.log(Object.keys(data["couples"]));
     for (let i = 0; i < Object.keys(data["couples"]).length; i++) {
         var couple = data["couples"][Object.keys(data["couples"])[i]];
-        listContent += "<li id='couple' " + i + "><div class='listItem'>" + 
-            "<p class='coupleName'>" + couple.name + "</p>" + 
-            "<p class='date1Label'> Legdatum eerste ei: " + formatDate(couple.date1) + "</p>" + 
-            "<p class='date2Label'> Legdatum tweede ei: " + formatDate(addDays(couple.date1, 2)) + "</p>" + 
-            "<p class='date3Label'> Uitkomst datum: " + formatDate(addDays(couple.date1, 18)) + "</p>" + 
-            "<p class='date4Label'> Ringdatum: " + formatDate(addDays(couple.date1, 25)) + "</p>" + 
-            "</div></li>";
+        listContent += "<li class='card' id='couple' " + i + "><div class='listItem'>" + 
+            "<p class='coupleName'>" + couple.name + "</p><table><tr>" + 
+            "<td class='date1Label'> Legdatum eerste ei: " + formatDate(couple.date1) + "</td>" + 
+            "<td class='date2Label'> Legdatum tweede ei: " + formatDate(addDays(couple.date1, 2)) + "</td></tr>" + 
+            "<tr><td class='date3Label'> Uitkomst datum: " + formatDate(addDays(couple.date1, 18)) + "</td>" + 
+            "<td class='date4Label'> Ringdatum: " + formatDate(addDays(couple.date1, 25)) + "</td></tr>" + 
+            "</table></div></li>";
     }
     var list = document.getElementById("mainList");
     list.innerHTML = listContent;
