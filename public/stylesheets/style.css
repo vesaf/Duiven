@@ -48,7 +48,7 @@ header {
 	margin: 90px 0;
 }
 
-input {
+input, textarea{
 	display: block;
 	margin: 10px 0;
 	background: transparent;
@@ -91,10 +91,6 @@ ul {
 	font-size: 25px;
 	top: 20px;
 	cursor: pointer;
-}
-
-.cover {
-	
 }
 
 h1 {

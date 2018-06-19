@@ -10,12 +10,13 @@ var data = {
 };
 
 document.addEventListener("DOMContentLoaded", function () {
+    var data = loadData();
     var listContent = "";
     console.log(Object.keys(data["couples"]));
     for (let i = 0; i < Object.keys(data["couples"]).length; i++) {
         var couple = data["couples"][Object.keys(data["couples"])[i]];
         listContent += "<li class='card' id='couple' " + i + "><div class='listItem'>" + 
-            "<p class='coupleName'>" + couple.name + "</p><table><tr>" + 
+            "<p class='coupleName'>" + couple.maleName + " & " + couple.femaleName + "</p><table><tr>" + 
             "<td class='date1Label'> Legdatum eerste ei: " + formatDate(couple.date1) + "</td>" + 
 			"<td><i class='fa fa-check'></i></td>" +
             "<td class='date2Label'> Legdatum tweede ei: " + formatDate(addDays(couple.date1, 2)) + "</td></tr>" +
@@ -52,4 +53,19 @@ function formatDate(date = new Date()) {
 
 function isHeaderButton (element) {
 	return (element.classList.contains("header-button"));
+}
+
+function loadData() {
+    var localStorage = window.localStorage;
+    var maxIdCount = Number(localStorage.idCount);
+    var data = {couples: []};
+    for (var i = 0; i < maxIdCount; i++) {
+        if (localStorage[i.toString()]) {
+            var couple = JSON.parse(localStorage[i.toString()]);
+            couple.id = i;
+            couple.date1 = new Date(couple.date1);
+            data.couples.push(couple);
+        }
+    }
+    return data;
 }
