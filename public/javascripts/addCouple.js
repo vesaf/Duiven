@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
     dateInput.value = formatDate();
 
     document.addEventListener("click", function (e) {
+        e.preventDefault();
         if (isHeaderButton(e.target) || isHeaderButton(e.target.parentElement)) window.open("./index.html", "_self");
         if (e.target.tagName == "BUTTON") collectData();
     });
