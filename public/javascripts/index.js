@@ -15,14 +15,54 @@ document.addEventListener("DOMContentLoaded", function () {
     console.log(Object.keys(data["couples"]));
     for (let i = 0; i < Object.keys(data["couples"]).length; i++) {
         var couple = data["couples"][Object.keys(data["couples"])[i]];
-        listContent += "<li class='card' id='couple' " + i + "><div class='listItem'>" + 
-            "<p class='coupleName'>" + couple.maleName + " & " + couple.femaleName + "</p><table><tr>" + 
-            "<td class='date1Label'> Legdatum eerste ei: " + formatDate(couple.date1) + "</td>" + 
-			"<td><i class='fa fa-check'></i></td>" +
-            "<td class='date2Label'> Legdatum tweede ei: " + formatDate(addDays(couple.date1, 2)) + "</td></tr>" +
-            "<tr><td class='date3Label'> Uitkomst datum: " + formatDate(addDays(couple.date1, 18)) + "</td>" + 
-            "<td class='date4Label'> Ringdatum: " + formatDate(addDays(couple.date1, 25)) + "</td></tr>" + 
-            "</table></div></li>";
+        var date1 = couple.date1;
+        var date2 = addDays(date1, 2);
+        var date3 = addDays(date1, 18);
+        var date4 = addDays(date1, 25);
+        var today = new Date();
+        today.setHours(0, 0, 0, 0);
+        today.setDate(today.getDate() + 1);
+        var date1Icon = (today >= date1) ? '<i class="fa fa-check"></i>' : '<i class="far fa-clock"></i>';
+        var date2Icon = (today >= date2) ? '<i class="fa fa-check"></i>' : '<i class="far fa-clock"></i>';
+        var date3Icon = (today >= date3) ? '<i class="fa fa-check"></i>' : '<i class="far fa-clock"></i>';
+        var date4Icon = (today >= date4) ? '<i class="fa fa-check"></i>' : '<i class="far fa-clock"></i>';
+        listContent += `
+            <li class="card" id="couple` + i + `">
+                <div class="listItem">
+                    <p class="coupleName">` + couple.maleName + ` & ` + couple.femaleName + `</p>
+                    <table>
+                        <tr>
+                            <td class="date1Label"> Legdatum eerste ei: ` + formatDate(date1) + `</td>
+                            <td>` + 
+                                date1Icon + `
+                            </td>
+                            <td class="date2Label"> Legdatum tweede ei: ` + formatDate(date2) + `</td>
+                            <td>` +
+                                date2Icon + `
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="date3Label"> Uitkomst datum: ` + formatDate(date3) + `</td>
+                            <td>` +
+                                date3Icon + `
+                            </td>
+                            <td class="date4Label"> Ringdatum: ` + formatDate(date4) + `</td>
+                            <td>` +
+                                date4Icon + `
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="editButton">
+                        <i class="far fa-edit"></i>
+                        <p class="editLabel">Bewerken</p> 
+                    </div>
+                    <div class="removeButton">
+                        <i class="far fa-trash-alt"></i>
+                        <p class="removeLabel">Verwijderen</p> 
+                    </div>
+                </div>
+            </li>
+        `;
     }
     var list = document.getElementById("mainList");
     list.innerHTML = listContent;

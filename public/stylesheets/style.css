@@ -79,6 +79,10 @@ li {
     box-shadow: 0 1px 3px 0 rgba(0,0,0,0.16),0 1px 5px 0 rgba(0,0,0,0.12);
 }
 
+table {
+    display: inline-block;
+}
+
 ul {
     list-style-type: none;
     padding: 0;
@@ -101,4 +105,86 @@ h1 {
 .coupleName {
     font-size: 15px;
     font-weight: bold;
+}
+
+td {
+    padding-right: 20px;
+}
+
+.fa-check {
+    color: #20be00;
+}
+
+.removeButton {
+    position: absolute;
+    top: -5px;
+    right: 20px;
+    background-color: #f54236;
+    color: #fff;
+    padding: 10px 10px;
+}
+
+.editButton {
+    position: absolute;
+    top: 47px;
+    right: 20px;
+    background-color: #20be00;
+    color: #fff;
+    padding: 10px 16px;
+}
+
+.removeButton:hover {
+    cursor: pointer;
+}
+
+
+.fa-trash-alt, .fa-edit {
+    display: inline-block;
+}
+
+.removeLabel, .editLabel {
+    display: inline-block;
+    margin: 0;
+}
+
+.listItem {
+    position: relative;
+}
+
+@media only screen and (max-width: 830px) and (min-width: 370px) {
+    .editButton {
+        position: relative;
+        display: inline-block;
+        top: 0;
+        left: 0;
+        width: 129px;
+    }
+
+    .removeButton {
+        position: relative;
+        display: inline-block;
+        top: 0;
+        margin-left: 40px;
+        width: 129px;
+    }
+}
+
+@media only screen and (max-width: 369px) {
+    .editButton {
+        position: relative;
+        display: block;
+        top: 0;
+        left: 0;
+        width: 129px;
+    }
+
+    .removeButton {
+        position: relative;
+        display: block;
+        top: 0;
+        left: 0;
+        margin-left: 0;
+        margin-top: 10px;
+        width: 129px;
+    }
 }
