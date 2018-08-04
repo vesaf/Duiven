@@ -9,12 +9,17 @@ var data = {
     ]
 };
 
+// Handles page load event
 document.addEventListener("DOMContentLoaded", function () {
+    // Get data from storage
     var data = loadData();
     var listContent = "";
-    console.log(Object.keys(data["couples"]));
+    var keys = Object.keys(data["couples"]);
+    // Add couples to list
     for (let i = 0; i < Object.keys(data["couples"]).length; i++) {
+        key = Object.keys(data["couples"])[i];
         var couple = data["couples"][Object.keys(data["couples"])[i]];
+        // Set relevant dates and their html elements
         var date1 = couple.date1;
         var date2 = addDays(date1, 2);
         var date3 = addDays(date1, 18);
@@ -26,8 +31,9 @@ document.addEventListener("DOMContentLoaded", function () {
         var date2Icon = (today >= date2) ? '<i class="fa fa-check"></i>' : '<i class="far fa-clock"></i>';
         var date3Icon = (today >= date3) ? '<i class="fa fa-check"></i>' : '<i class="far fa-clock"></i>';
         var date4Icon = (today >= date4) ? '<i class="fa fa-check"></i>' : '<i class="far fa-clock"></i>';
+        // Compile couple card html
         listContent += `
-            <li class="card" id="couple` + i + `">
+            <li class="card" id="couple` + couple.id + `">
                 <div class="listItem">
                     <p class="coupleName">` + couple.maleName + ` & ` + couple.femaleName + `</p>
                     <table>
@@ -66,20 +72,31 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     var list = document.getElementById("mainList");
     list.innerHTML = listContent;
-	
-	var addButton = document.getElementById("addButton");
-	console.log(addButton);
+
+    // Handles click events
 	document.addEventListener("click", function (e) {
-		if (isHeaderButton(e.target) || isHeaderButton(e.target.parentElement)) window.open("./addCouple.html", "_self");
+        // Handles click on header add button
+		if (hasClass(e.target, "header-button") || hasClass(e.target.parentElement, "header-button")) {
+            window.open("./addCouple.html", "_self");
+        }
+        // Handles click on couple remove button
+        if (hasClass(e.target, "removeButton") || hasClass(e.target.parentElement, "removeButton")) {
+            var button = (hasClass(e.target, "removeButton")) ? e.tagret : e.target.parentElement;
+            var card = button.parentElement.parentElement;
+            var coupleNo = card.id.substring(6);
+            removeCouple(coupleNo);
+        }
 	});
 }, false);
 
+// Adds days to a given date
 function addDays(date = new Date(), days) {
     var result = new Date(date);
     result.setDate(result.getDate() + days);
     return result;
 }
 
+// Formats a date so that it goes into a date input
 function formatDate(date = new Date()) {
     let month = String(date.getMonth() + 1);
     let day = String(date.getDate());
@@ -89,12 +106,14 @@ function formatDate(date = new Date()) {
     if (day.length < 2) day = '0' + day;
   
     return `${day}/${month}/${year}`;
-} 
-
-function isHeaderButton (element) {
-	return (element.classList.contains("header-button"));
 }
 
+// Checks whether an element has a certain class
+function hasClass (element, className) {
+    return (element.classList.contains(className));
+}
+
+// Gets the couple data from local storage
 function loadData() {
     var localStorage = window.localStorage;
     var maxIdCount = Number(localStorage.idCount);
@@ -107,5 +126,13 @@ function loadData() {
             data.couples.push(couple);
         }
     }
+    console.log(data);
     return data;
+}
+
+// Removes a couple from local storage
+function removeCouple(coupleNo) {
+    var localStorage = window.localStorage;
+    delete localStorage[coupleNo];
+    location.reload();
 }
