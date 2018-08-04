@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Duiven</title>
+    <link rel="stylesheet" type="text/css" href="./stylesheets/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- <script type="text/javascript" src="./javascripts/addCouple.js"></script> -->
+    <script defer src="./javascripts/fontawesome-all.min.js"></script>
+</head>
+
+<body>
+    <header class="container header">
+        <h1>Koppel bewerken</h1>
+        <div class="cover">
+            <i class="fa fa-arrow-left header-button" id="addButton"></i>
+        </div>
+    </header>
+
+    <div class="container form">
+        <form id="editForm">
+            <input id="maleNameInput" placeholder="Naam/ringnummer mannetje" required></input>
+            <input id="femaleNameInput" placeholder="Naam/ringnummer vrouwtje" required></input>
+            <input id="dateInput" type="date" required></input>
+
+            <input type="checkbox" name="Tweede ei gelegd" value="egg2Layed">
+            <p class="checkboxLabel">Tweede ei gelegd</p>
+            <br>
+            <input type="checkbox" name="Eerste ei uitgekomen" value="egg1Done">
+            <p class="checkboxLabel">Eerste ei uitgekomen</p>
+            <br>
+            <input type="checkbox" name="Tweede ei uitgekomen" value="egg2Done">
+            <p class="checkboxLabel">Tweede ei uitgekomen</p>
+            <br>
+            <input type="checkbox" name="Duiven geringd" value="ringed">
+            <p class="checkboxLabel">Duiven geringd</p>
+
+            <textarea id="notesInput" placeholder="Opmerkingen"></textarea>
+            <button type="submit">Opslaan</button>
+        </form>
+
+    </div>
+
+</body>

@@ -60,6 +60,16 @@ input, textarea{
 	width: 100%;
 }
 
+.checkboxLabel {
+    display: inline-block;
+    font-size: 12px;
+}
+
+input[type="checkbox"] {
+    display: inline-block;
+    width: 13px;
+}
+
 button {
 	border: 1px solid #000000;
 	background-color: #d1d1d1;
@@ -151,7 +161,7 @@ td {
     position: relative;
 }
 
-@media only screen and (max-width: 830px) and (min-width: 370px) {
+@media only screen and (max-width: 830px) and (min-width: 379px) {
     .editButton {
         position: relative;
         display: inline-block;
@@ -165,6 +175,27 @@ td {
         display: inline-block;
         top: 0;
         margin-left: 40px;
+        width: 129px;
+    }
+}
+
+/* I don't know why this is necessary but it is. Keep it! */
+@media only screen and (max-width: 378px) and (min-width: 370px) {
+    .editButton {
+        position: relative;
+        display: block;
+        top: 0;
+        left: 0;
+        width: 129px;
+    }
+
+    .removeButton {
+        position: relative;
+        display: block;
+        top: 0;
+        left: 0;
+        margin-left: 0;
+        margin-top: 10px;
         width: 129px;
     }
 }

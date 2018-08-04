@@ -86,6 +86,13 @@ document.addEventListener("DOMContentLoaded", function () {
             var coupleNo = card.id.substring(6);
             removeCouple(coupleNo);
         }
+        // Handles click on couple edit button
+        if (hasClass(e.target, "editButton") || hasClass(e.target.parentElement, "editButton")) {
+            var button = (hasClass(e.target, "editButton")) ? e.tagret : e.target.parentElement;
+            var card = button.parentElement.parentElement;
+            var coupleNo = card.id.substring(6);
+            
+        }
 	});
 }, false);
 
@@ -96,7 +103,7 @@ function addDays(date = new Date(), days) {
     return result;
 }
 
-// Formats a date so that it goes into a date input
+// Formats a date so that it goes into a string
 function formatDate(date = new Date()) {
     let month = String(date.getMonth() + 1);
     let day = String(date.getDate());

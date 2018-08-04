@@ -20,6 +20,7 @@ function isHeaderButton(element) {
     else return false;
 }
 
+// Format date so it goes in a date input
 function formatDate(date = new Date()) {
     let month = String(date.getMonth() + 1);
     let day = String(date.getDate());
