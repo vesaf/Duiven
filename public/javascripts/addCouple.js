@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.addEventListener("click", function (e) {
         e.preventDefault();
-        if (isHeaderButton(e.target) || isHeaderButton(e.target.parentElement)) window.open("./index.html", "_self");
+        if (hasClass(e.target, "header-button") || hasClass(e.target.parentElement, "header-button")) window.open("./index.html", "_self");
         if (e.target.tagName == "BUTTON") collectData();
     });
 
@@ -14,11 +14,6 @@ document.addEventListener("DOMContentLoaded", function () {
         return false;
     });
 }, false);
-
-function isHeaderButton(element) {
-    if (element) return (element.classList.contains("header-button"));
-    else return false;
-}
 
 function collectData() {
     var dataPoint = {};
@@ -31,8 +26,9 @@ function collectData() {
 
 function saveData(dataPoint) {
     var localStorage = window.localStorage;
-    if (localStorage.idCount)
+    if (localStorage.idCount) {
         var idCount = Number(localStorage.idCount);
+    }
     else {
         var idCount = 0;
         localStorage.idCount = "0";

@@ -88,10 +88,10 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         // Handles click on couple edit button
         if (hasClass(e.target, "editButton") || hasClass(e.target.parentElement, "editButton")) {
-            var button = (hasClass(e.target, "editButton")) ? e.tagret : e.target.parentElement;
+            var button = (hasClass(e.target, "editButton")) ? e.target : e.target.parentElement;
             var card = button.parentElement.parentElement;
             var coupleNo = card.id.substring(6);
-            
+            window.open("./editCouple.html?id=" + coupleNo, "_self");
         }
 	});
 }, false);

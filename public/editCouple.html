@@ -6,7 +6,7 @@
     <link rel="stylesheet" type="text/css" href="./stylesheets/style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script type="text/javascript" src="./javascripts/helpers.js"></script>
-    <!-- <script type="text/javascript" src="./javascripts/addCouple.js"></script> -->
+    <script type="text/javascript" src="./javascripts/editCouple.js"></script>
     <script defer src="./javascripts/fontawesome-all.min.js"></script>
 </head>
 
@@ -24,16 +24,16 @@
             <input id="femaleNameInput" placeholder="Naam/ringnummer vrouwtje" required></input>
             <input id="dateInput" type="date" required></input>
 
-            <input type="checkbox" name="Tweede ei gelegd" value="egg2Layed">
+            <input type="checkbox" name="Tweede ei gelegd" id="egg2LayedCheckbox">
             <p class="checkboxLabel">Tweede ei gelegd</p>
             <br>
-            <input type="checkbox" name="Eerste ei uitgekomen" value="egg1Done">
+            <input type="checkbox" name="Eerste ei uitgekomen" id="egg1DoneCheckbox">
             <p class="checkboxLabel">Eerste ei uitgekomen</p>
             <br>
-            <input type="checkbox" name="Tweede ei uitgekomen" value="egg2Done">
+            <input type="checkbox" name="Tweede ei uitgekomen" id="egg2DoneCheckbox">
             <p class="checkboxLabel">Tweede ei uitgekomen</p>
             <br>
-            <input type="checkbox" name="Duiven geringd" value="ringed">
+            <input type="checkbox" name="Duiven geringd" id="ringedCheckbox">
             <p class="checkboxLabel">Duiven geringd</p>
 
             <textarea id="notesInput" placeholder="Opmerkingen"></textarea>
