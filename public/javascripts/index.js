@@ -38,21 +38,21 @@ document.addEventListener("DOMContentLoaded", function () {
                     <p class="coupleName">` + couple.maleName + ` & ` + couple.femaleName + `</p>
                     <table>
                         <tr>
-                            <td class="date1Label"> Legdatum eerste ei: ` + formatDate(date1) + `</td>
+                            <td class="date1Label"> Legdatum eerste ei: ` + formatDateToString(date1) + `</td>
                             <td>` + 
                                 date1Icon + `
                             </td>
-                            <td class="date2Label"> Legdatum tweede ei: ` + formatDate(date2) + `</td>
+                            <td class="date2Label"> Legdatum tweede ei: ` + formatDateToString(date2) + `</td>
                             <td>` +
                                 date2Icon + `
                             </td>
                         </tr>
                         <tr>
-                            <td class="date3Label"> Uitkomst datum: ` + formatDate(date3) + `</td>
+                            <td class="date3Label"> Uitkomst datum: ` + formatDateToString(date3) + `</td>
                             <td>` +
                                 date3Icon + `
                             </td>
-                            <td class="date4Label"> Ringdatum: ` + formatDate(date4) + `</td>
+                            <td class="date4Label"> Ringdatum: ` + formatDateToString(date4) + `</td>
                             <td>` +
                                 date4Icon + `
                             </td>
@@ -95,30 +95,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 	});
 }, false);
-
-// Adds days to a given date
-function addDays(date = new Date(), days) {
-    var result = new Date(date);
-    result.setDate(result.getDate() + days);
-    return result;
-}
-
-// Formats a date so that it goes into a string
-function formatDate(date = new Date()) {
-    let month = String(date.getMonth() + 1);
-    let day = String(date.getDate());
-    const year = String(date.getFullYear());
-  
-    if (month.length < 2) month = '0' + month;
-    if (day.length < 2) day = '0' + day;
-  
-    return `${day}/${month}/${year}`;
-}
-
-// Checks whether an element has a certain class
-function hasClass (element, className) {
-    return (element.classList.contains(className));
-}
 
 // Gets the couple data from local storage
 function loadData() {
