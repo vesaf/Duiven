@@ -2,14 +2,15 @@
 <widget id="com.vesa.duiven" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Duiven</name>
     <description>
-        A sample Apache Cordova application that responds to the deviceready event.
+        App die helpt bij het fokken van duiven
     </description>
-    <author email="dev@cordova.apache.org" href="http://cordova.io">
-        Apache Cordova Team
+    <author email="vesaf@msn.com">
+        Vesa Frijling
     </author>
     <content src="index.html" />
     <plugin name="cordova-plugin-whitelist" spec="1" />
     <access origin="*" />
+    <icon src="./res/icon/logo96.PNG" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />

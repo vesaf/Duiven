@@ -1,13 +1,8 @@
-var data = {
-    "couples": [
-        {
-            "name": "Koppel 1",
-            "date1": new Date()
-        },
-        {"name": "Koppel 2"},
-        {"name": "Koppel 3"},
-    ]
-};
+// TODO: Red cross for things that didn't happen (instead of clock)
+// TODO: If no couples dark grey explanation text that explains how to add a couple
+// TODO: notifications
+// TODO: Comment code
+// TODO: disabe landscape mode
 
 // Handles page load event
 document.addEventListener("DOMContentLoaded", function () {

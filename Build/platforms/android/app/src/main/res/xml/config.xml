@@ -6,13 +6,14 @@
     </feature>
     <name>Duiven</name>
     <description>
-        A sample Apache Cordova application that responds to the deviceready event.
+        App die helpt bij het fokken van duiven
     </description>
-    <author email="dev@cordova.apache.org" href="http://cordova.io">
-        Apache Cordova Team
+    <author email="vesaf@msn.com">
+        Vesa Frijling
     </author>
     <content src="index.html" />
     <access origin="*" />
+    <icon src="./res/icon/logo96.PNG" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />

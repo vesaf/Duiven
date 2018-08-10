@@ -1,5 +1,5 @@
-// TODO: comment
-// TODO: checking for illogical situations (disable illogical checkboxes)
+// TODO: Comment
+// TODO: Checking for illogical situations (disable illogical checkboxes)
 
 document.addEventListener("DOMContentLoaded", function () {
     var coupleData = getDataFromDb();
