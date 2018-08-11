@@ -161,6 +161,12 @@ td {
     position: relative;
 }
 
+#explanationText {
+    margin: 90px 0;
+    text-align: center;
+    color: #505050;
+}
+
 @media only screen and (max-width: 830px) and (min-width: 379px) {
     .editButton {
         position: relative;

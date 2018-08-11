@@ -1,6 +1,11 @@
 // Checks whether an element has a certain class
 function hasClass (element, className) {
-    return (element.classList.contains(className));
+    if (element && className && element.classList) {
+        return (element.classList.contains(className));
+    }
+    else {
+        return undefined;
+    }
 }
 
 // Formats a date so that it goes into a string

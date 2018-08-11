@@ -1,13 +1,7 @@
-var data = {
-    "couples": [
-        {
-            "name": "Koppel 1",
-            "date1": new Date()
-        },
-        {"name": "Koppel 2"},
-        {"name": "Koppel 3"},
-    ]
-};
+// TODO: Red cross for things that didn't happen (instead of clock)
+// TODO: notifications
+// TODO: disabe landscape mode
+// TODO: delete confirmation
 
 // Handles page load event
 document.addEventListener("DOMContentLoaded", function () {
@@ -76,6 +70,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     var list = document.getElementById("mainList");
     list.innerHTML = listContent;
+
+    if (Object.keys(data["couples"]).length === 0) {
+        document.getElementById("container").innerHTML = "<p id='explanationText'> Klik rechts boven op het plusje om een koppel toe te voegen. </p>"
+    }
 
     // Handles click events
 	document.addEventListener("click", function (e) {

@@ -1,8 +1,6 @@
 // TODO: Red cross for things that didn't happen (instead of clock)
-// TODO: If no couples dark grey explanation text that explains how to add a couple
 // TODO: notifications
-// TODO: Comment code
-// TODO: disabe landscape mode
+// TODO: delete confirmation
 
 // Handles page load event
 document.addEventListener("DOMContentLoaded", function () {
@@ -71,6 +69,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     var list = document.getElementById("mainList");
     list.innerHTML = listContent;
+
+    if (Object.keys(data["couples"]).length === 0) {
+        document.getElementById("container").innerHTML = "<p id='explanationText'> Klik rechts boven op het plusje om een koppel toe te voegen. </p>"
+    }
 
     // Handles click events
 	document.addEventListener("click", function (e) {
