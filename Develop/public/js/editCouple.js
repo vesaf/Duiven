@@ -65,6 +65,9 @@ function getDataFromDb() {
 
 // Enters data into inputs and checkboxes
 function enterData(coupleData) {
+	if (coupleData.bakNo) {
+		document.getElementById("bakNoInput").value = coupleData.bakNo;
+	}
     document.getElementById("maleNameInput").value = coupleData.maleName;
     document.getElementById("femaleNameInput").value = coupleData.femaleName;
     document.getElementById("dateInput").value = formatDateToInput(coupleData.date1);
@@ -130,6 +133,7 @@ function collectData(id) {
     else {
         dataPoint["ringeddAbn"] = undefined;
     }
+	dataPoint["bakNo"] = document.getElementById("bakNoInput").value;
     dataPoint["maleName"] = document.getElementById("maleNameInput").value;
     dataPoint["femaleName"] = document.getElementById("femaleNameInput").value;
     dataPoint["date1"] = new Date(document.getElementById("dateInput").value);

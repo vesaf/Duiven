@@ -17,6 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function collectData() {
     var dataPoint = {};
+	dataPoint["bakNo"] = document.getElementById("bakNoInput").value;
     dataPoint["maleName"] = document.getElementById("maleNameInput").value;
     dataPoint["femaleName"] = document.getElementById("femaleNameInput").value;
     dataPoint["date1"] = new Date(document.getElementById("dateInput").value);
