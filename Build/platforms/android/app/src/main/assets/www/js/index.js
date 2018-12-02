@@ -1,6 +1,5 @@
 // TODO: Red cross for things that didn't happen (instead of clock)
 // TODO: notifications
-// TODO: disabe landscape mode
 // TODO: delete confirmation
 
 // Handles page load event
@@ -29,11 +28,13 @@ document.addEventListener("DOMContentLoaded", function () {
         var date4Checked = (couple["ringedAbn"] !== undefined) ? couple["ringedAbn"] : today >= date4;
         var date4Icon = (date4Checked) ? '<i class="fa fa-check"></i>' : '<i class="far fa-clock"></i>';
 
+		const coupleHeader = (couple.bakNo) ? couple.bakNo + " " + couple.maleName + " & " + couple.femaleName : couple.maleName + " & " + couple.femaleName;
+		
         // Compile couple card html
         listContent += `
             <li class="card" id="couple` + couple.id + `">
                 <div class="listItem">
-                    <p class="coupleName">` + couple.maleName + ` & ` + couple.femaleName + `</p>
+                    <p class="coupleName">` + coupleHeader + `</p>
                     <table>
                         <tr>
                             <td class="date1Label"> Legdatum eerste ei: ` + formatDateToString(date1) + `</td>

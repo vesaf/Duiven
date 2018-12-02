@@ -4,10 +4,16 @@ document.addEventListener("DOMContentLoaded", function () {
     dateInput.value = formatDateToInput();
 
     document.addEventListener("click", function (e) {
-        e.preventDefault();
-        if (hasClass(e.target, "header-button") || hasClass(e.target.parentElement, "header-button")) window.open("./index.html", "_self");
-        if (e.target.tagName == "BUTTON") collectData();
+        if (hasClass(e.target, "header-button") || hasClass(e.target.parentElement, "header-button")) {
+            window.open("./index.html", "_self");
+        }
     });
+
+    document.getElementById("addForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        collectData();
+    }, false)
+    // if (e.target.tagName == "BUTTON") 
 
     var form = document.getElementById("addForm");
     form.addEventListener("submit", function () {
@@ -17,6 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function collectData() {
     var dataPoint = {};
+	dataPoint["bakNo"] = document.getElementById("bakNoInput").value;
     dataPoint["maleName"] = document.getElementById("maleNameInput").value;
     dataPoint["femaleName"] = document.getElementById("femaleNameInput").value;
     dataPoint["date1"] = new Date(document.getElementById("dateInput").value);

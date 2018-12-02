@@ -6,18 +6,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Listen for click on header button (then go back to main page), or click on submit button (then submit data)
     document.addEventListener("click", function (e) {
-        if (hasClass(e.target, "header-button") || hasClass(e.target.parentElement, "header-button")) window.open("./index.html", "_self");
-        else if (e.target.tagName == "BUTTON") {
-            e.preventDefault();
-            collectData(coupleData.id);
+        if (hasClass(e.target, "header-button") || hasClass(e.target.parentElement, "header-button")) {
+            window.open("./index.html", "_self");
         }
     });
 
-    // Disable submit to server
-    // TODO: check if I can do collectData here instead of in click event listener
+    // Disable submit to server and collect data
     var form = document.getElementById("editForm");
-    form.addEventListener("submit", function () {
-        return false;
+    form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        collectData(coupleData.id);
     });
 
     // Set checkboxes on date change
@@ -65,6 +63,9 @@ function getDataFromDb() {
 
 // Enters data into inputs and checkboxes
 function enterData(coupleData) {
+	if (coupleData.bakNo) {
+		document.getElementById("bakNoInput").value = coupleData.bakNo;
+	}
     document.getElementById("maleNameInput").value = coupleData.maleName;
     document.getElementById("femaleNameInput").value = coupleData.femaleName;
     document.getElementById("dateInput").value = formatDateToInput(coupleData.date1);
@@ -130,6 +131,7 @@ function collectData(id) {
     else {
         dataPoint["ringeddAbn"] = undefined;
     }
+	dataPoint["bakNo"] = document.getElementById("bakNoInput").value;
     dataPoint["maleName"] = document.getElementById("maleNameInput").value;
     dataPoint["femaleName"] = document.getElementById("femaleNameInput").value;
     dataPoint["date1"] = new Date(document.getElementById("dateInput").value);

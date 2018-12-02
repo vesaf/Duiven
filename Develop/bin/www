@@ -20,7 +20,7 @@ var server = http.createServer(app);
  */
 getIPv4(function (IPv4) {
   console.log("Port:", IPv4);
-  server.listen(80, IPv4);
+  server.listen(80, 'localhost');//IPv4);
   server.on('error', onError);
   server.on('listening', onListening);
 });

@@ -1,5 +1,5 @@
 #Internal package file, do not edit.
-#Sat Aug 11 09:32:16 CEST 2018
+#Fri Nov 30 17:37:34 CET 2018
 25.file=C\:\\Users\\vesaf\\Documents\\GitHub\\Duiven\\Build\\platforms\\android\\app\\build\\intermediates\\assets\\debug\\www\\index.html
 25.base=C\:\\Users\\vesaf\\Documents\\GitHub\\Duiven\\Build\\platforms\\android\\app\\build\\intermediates\\assets\\debug
 22.set=ASSET
