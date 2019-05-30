@@ -1,4 +1,4 @@
-// Checks whether an element has a certain class
+// Checks whether an element has a certain CSS class
 function hasClass (element, className) {
     if (element && className && element.classList) {
         return (element.classList.contains(className));
@@ -8,7 +8,7 @@ function hasClass (element, className) {
     }
 }
 
-// Formats a date so that it goes into a string
+// Formats a date into standard European string format
 function formatDateToString(date = new Date()) {
     let month = String(date.getMonth() + 1);
     let day = String(date.getDate());

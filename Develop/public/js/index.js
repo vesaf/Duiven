@@ -7,11 +7,11 @@ document.addEventListener("DOMContentLoaded", function () {
     // Get data from storage
     var data = loadData();
     var listContent = "";
-    var keys = Object.keys(data["couples"]);
+    var ids = Object.keys(data["couples"]);
     // Add couples to list
-    for (let i = 0; i < Object.keys(data["couples"]).length; i++) {
-        key = Object.keys(data["couples"])[i];
-        var couple = data["couples"][Object.keys(data["couples"])[i]];
+    for (let i = 0; i < ids.length; i++) {
+        id = ids[i];
+        var couple = data["couples"][id];
         // Set relevant dates and their html elements
         var date1 = couple.date1;
         var date2 = addDays(date1, 2);
@@ -72,7 +72,8 @@ document.addEventListener("DOMContentLoaded", function () {
     var list = document.getElementById("mainList");
     list.innerHTML = listContent;
 
-    if (Object.keys(data["couples"]).length === 0) {
+    // If there are no couple data yet insert explanation of what to do
+    if (ids.length === 0) {
         document.getElementById("container").innerHTML = "<p id='explanationText'> Klik rechts boven op het plusje om een koppel toe te voegen. </p>"
     }
 
@@ -86,15 +87,15 @@ document.addEventListener("DOMContentLoaded", function () {
         if (hasClass(e.target, "removeButton") || hasClass(e.target.parentElement, "removeButton")) {
             var button = (hasClass(e.target, "removeButton")) ? e.tagret : e.target.parentElement;
             var card = button.parentElement.parentElement;
-            var coupleNo = card.id.substring(6);
-            removeCouple(coupleNo);
+            var coupleId = card.id.substring(6);
+            removeCouple(coupleId);
         }
         // Handles click on couple edit button
         if (hasClass(e.target, "editButton") || hasClass(e.target.parentElement, "editButton")) {
             var button = (hasClass(e.target, "editButton")) ? e.target : e.target.parentElement;
             var card = button.parentElement.parentElement;
-            var coupleNo = card.id.substring(6);
-            window.open("./editCouple.html?id=" + coupleNo, "_self");
+            var coupleId = card.id.substring(6);
+            window.open("./editCouple.html?id=" + coupleId, "_self");
         }
 	});
 }, false);
