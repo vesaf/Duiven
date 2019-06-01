@@ -6,12 +6,101 @@
 document.addEventListener("DOMContentLoaded", function () {
     // Get data from storage
     var data = loadData();
+    if (Object.keys(data["couples"]).length > 0) {
+        document.getElementById("container").innerHTML = "<input id='searchBar' placeholder='Zoeken'></input>" + document.getElementById("container").innerHTML;
+        document.getElementById("searchBar").addEventListener("keyup", function (e) {
+            const query = document.getElementById("searchBar").value;
+            const results = search(data["couples"], query);
+            showData(results);
+        });
+        showData(data["couples"]);
+    }
+    else {
+        document.getElementById("container").innerHTML = "<p id='explanationText'> Klik rechts boven op het plusje om een koppel toe te voegen. </p>";
+        
+    }
+   
+
+    // Handles click events
+	document.addEventListener("click", function (e) {
+        // Handles click on header add button
+		if (hasClass(e.target, "header-button") || hasClass(e.target.parentElement, "header-button")) {
+            window.open("./addCouple.html", "_self");
+        }
+        // Handles click on couple remove button
+        if (hasClass(e.target, "removeButton") || hasClass(e.target.parentElement, "removeButton")) {
+            var button = (hasClass(e.target, "removeButton")) ? e.tagret : e.target.parentElement;
+            var card = button.parentElement.parentElement;
+            var coupleId = card.id.substring(6);
+            removeCouple(coupleId);
+        }
+        // Handles click on couple edit button
+        if (hasClass(e.target, "editButton") || hasClass(e.target.parentElement, "editButton")) {
+            var button = (hasClass(e.target, "editButton")) ? e.target : e.target.parentElement;
+            var card = button.parentElement.parentElement;
+            var coupleId = card.id.substring(6);
+            window.open("./editCouple.html?id=" + coupleId, "_self");
+        }
+	});
+}, false);
+
+// Gets the couple data from local storage
+function loadData() {
+    var localStorage = window.localStorage;
+    var maxIdCount = Number(localStorage.idCount);
+    var data = {couples: []};
+    for (var i = 0; i < maxIdCount; i++) {
+        if (localStorage[i.toString()]) {
+            var couple = JSON.parse(localStorage[i.toString()]);
+            couple.id = i;
+            couple.date1 = new Date(couple.date1);
+            data.couples.push(couple);
+        }
+    }
+    return data;
+}
+
+// Removes a couple from local storage
+function removeCouple(coupleNo) {
+    var localStorage = window.localStorage;
+    delete localStorage[coupleNo];
+    location.reload();
+}
+
+function search(couples, query) {
+    if (query === "") {
+        return couples;
+    }
+    query = query.toLowerCase();
+    const ids = Object.keys(couples);
+    var results = {}
+    const queryList = query.split(" ");
+    for (let i = 0; i < ids.length; i++) {
+        const id = ids[i];
+        const couple = couples[id];
+        var coupleHeader = (couple.bakNo) ? couple.bakNo + " " + couple.maleName + " & " + couple.femaleName + " " + couple.notes : couple.maleName + " & " + couple.femaleName + " " + couple.notes;
+        coupleHeader = coupleHeader.toLowerCase();
+        var found = 0;
+        for (let j = 0; j < queryList.length; j++) {
+            const subQuery = queryList[j];
+            if (coupleHeader.indexOf(subQuery) >= 0) {
+                found++;
+            }
+        }
+        if (found === queryList.length) {
+            results[id] = couple;
+        }
+    }
+    return results;
+}
+
+function showData(couples) {
     var listContent = "";
-    var ids = Object.keys(data["couples"]);
+    var ids = Object.keys(couples);
     // Add couples to list
     for (let i = 0; i < ids.length; i++) {
         id = ids[i];
-        var couple = data["couples"][id];
+        var couple = couples[id];
         // Set relevant dates and their html elements
         var date1 = couple.date1;
         var date2 = addDays(date1, 2);
@@ -69,56 +158,5 @@ document.addEventListener("DOMContentLoaded", function () {
             </li>
         `;
     }
-    var list = document.getElementById("mainList");
-    list.innerHTML = listContent;
-
-    // If there are no couple data yet insert explanation of what to do
-    if (ids.length === 0) {
-        document.getElementById("container").innerHTML = "<p id='explanationText'> Klik rechts boven op het plusje om een koppel toe te voegen. </p>"
-    }
-
-    // Handles click events
-	document.addEventListener("click", function (e) {
-        // Handles click on header add button
-		if (hasClass(e.target, "header-button") || hasClass(e.target.parentElement, "header-button")) {
-            window.open("./addCouple.html", "_self");
-        }
-        // Handles click on couple remove button
-        if (hasClass(e.target, "removeButton") || hasClass(e.target.parentElement, "removeButton")) {
-            var button = (hasClass(e.target, "removeButton")) ? e.tagret : e.target.parentElement;
-            var card = button.parentElement.parentElement;
-            var coupleId = card.id.substring(6);
-            removeCouple(coupleId);
-        }
-        // Handles click on couple edit button
-        if (hasClass(e.target, "editButton") || hasClass(e.target.parentElement, "editButton")) {
-            var button = (hasClass(e.target, "editButton")) ? e.target : e.target.parentElement;
-            var card = button.parentElement.parentElement;
-            var coupleId = card.id.substring(6);
-            window.open("./editCouple.html?id=" + coupleId, "_self");
-        }
-	});
-}, false);
-
-// Gets the couple data from local storage
-function loadData() {
-    var localStorage = window.localStorage;
-    var maxIdCount = Number(localStorage.idCount);
-    var data = {couples: []};
-    for (var i = 0; i < maxIdCount; i++) {
-        if (localStorage[i.toString()]) {
-            var couple = JSON.parse(localStorage[i.toString()]);
-            couple.id = i;
-            couple.date1 = new Date(couple.date1);
-            data.couples.push(couple);
-        }
-    }
-    return data;
-}
-
-// Removes a couple from local storage
-function removeCouple(coupleNo) {
-    var localStorage = window.localStorage;
-    delete localStorage[coupleNo];
-    location.reload();
+    document.getElementById("mainList").innerHTML = listContent;
 }

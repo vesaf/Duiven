@@ -1,21 +1,23 @@
+// When page loaded
 document.addEventListener("DOMContentLoaded", function () {
     // Load couple data
     var coupleData = getDataFromDb();
     // Enter couple data into inputs
     enterData(coupleData);
 
-    // Listen for click on header button (then go back to main page), or click on submit button (then submit data)
+    // Listen for click on header button (then go back to main page)
     document.addEventListener("click", function (e) {
         if (hasClass(e.target, "header-button") || hasClass(e.target.parentElement, "header-button")) {
             window.open("./index.html", "_self");
         }
     });
 
-    // Disable submit to server and collect data
+    // Disable standard submit procedure and collect data
     var form = document.getElementById("editForm");
     form.addEventListener("submit", function (e) {
         e.preventDefault();
-        collectData(coupleData.id);
+        // Save data to db
+        saveData(collectData(), coupleData.id);
     });
 
     // Set checkboxes on date change
@@ -53,8 +55,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Collect data from database
 function getDataFromDb() {
+    // Load current state of local storage
     const localStorage = window.localStorage;
+    // Get relevant ID from URL
     var id = window.location.search.substring(4);
+    // Get ID's data from storage
     var coupleData = JSON.parse(localStorage[id]);
     coupleData.date1 = new Date(coupleData.date1);
     coupleData.id = id;
@@ -63,6 +68,7 @@ function getDataFromDb() {
 
 // Enters data into inputs and checkboxes
 function enterData(coupleData) {
+    // Necessary for backwards compatibility
 	if (coupleData.bakNo) {
 		document.getElementById("bakNoInput").value = coupleData.bakNo;
 	}
@@ -82,8 +88,8 @@ function enterData(coupleData) {
     document.getElementById("ringedCheckbox").checked = (coupleData["ringedAbn"] !== undefined) ? coupleData["ringedAbn"] : today >= date4;
 }
 
-// Collect data from inputs
-function collectData(id) {
+// Collect data from inputs and return to caller
+function collectData() {
     var dataPoint = {};
     var today = new Date();
     var date1 = new Date(document.getElementById("dateInput").value);
@@ -136,8 +142,7 @@ function collectData(id) {
     dataPoint["femaleName"] = document.getElementById("femaleNameInput").value;
     dataPoint["date1"] = new Date(document.getElementById("dateInput").value);
     dataPoint["notes"] = document.getElementById("notesInput").value;
-    // Save data to db
-    saveData(dataPoint, id);
+    return dataPoint
 }
 
 // Saves data to db
