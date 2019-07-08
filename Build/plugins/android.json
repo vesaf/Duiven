@@ -7,9 +7,19 @@
     "files": {}
   },
   "installed_plugins": {
+    "cordova-plugin-local-notification": {
+      "PACKAGE_NAME": "com.example.duiven"
+    },
     "cordova-plugin-whitelist": {
-      "PACKAGE_NAME": "com.vesa.duiven"
+      "PACKAGE_NAME": "com.example.duiven"
     }
   },
-  "dependent_plugins": {}
+  "dependent_plugins": {
+    "cordova-plugin-device": {
+      "PACKAGE_NAME": "com.example.duiven"
+    },
+    "cordova-plugin-badge": {
+      "PACKAGE_NAME": "com.example.duiven"
+    }
+  }
 }

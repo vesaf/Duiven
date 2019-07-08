@@ -3,7 +3,8 @@
 // TODO: delete confirmation
 
 // Handles page load event
-document.addEventListener("DOMContentLoaded", function () {
+// document.addEventListener("DOMContentLoaded", function () {
+function startApp() {
     // Get data from storage
     var data = loadData();
     if (Object.keys(data["couples"]).length > 0) {
@@ -41,8 +42,20 @@ document.addEventListener("DOMContentLoaded", function () {
             var coupleId = card.id.substring(6);
             window.open("./editCouple.html?id=" + coupleId, "_self");
         }
-	});
-}, false);
+    });
+    
+    try {
+        cordova.plugins.notification.local.schedule({
+            title: 'My first notification',
+            text: 'Thats pretty easy...',
+            foreground: true
+        });
+    }
+    catch(err) {
+        alert(err);
+    }
+}
+// }, false);
 
 // Gets the couple data from local storage
 function loadData() {
@@ -160,3 +173,32 @@ function showData(couples) {
     }
     document.getElementById("mainList").innerHTML = listContent;
 }
+
+var app = {
+    // Application Constructor
+    initialize: function() {
+        document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
+    },
+
+    // deviceready Event Handler
+    //
+    // Bind any cordova events here. Common events are:
+    // 'pause', 'resume', etc.
+    onDeviceReady: function() {
+        this.receivedEvent('deviceready');
+    },
+
+    // Update DOM on a Received Event
+    receivedEvent: function(id) {
+        console.log('Received Event: ' + id);
+        if (id == 'deviceready') {
+            cordova.plugins.notification.local.schedule({
+                title: 'Test voor Vesa',
+                trigger: { in: 30, unit: 'second' }
+            });
+            startApp();
+        }
+    }
+};
+
+app.initialize();
