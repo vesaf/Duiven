@@ -53,26 +53,28 @@ function saveData(dataPoint) {
     }
     // Save couple at ID
     localStorage[idCount] =  JSON.stringify(dataPoint);
-    // Increment last used ID
-    localStorage.idCount = (idCount + 1).toString();
     try {
-        // alert("ALERT 1");
+        const idCountInt = parseInt(idCount);
         cordova.plugins.notification.local.schedule([
-            { id: 1, title: dataPoint["femaleName"] + " legt het eerste ei van " + dataPoint["maleName"], trigger: { in: 10, unit: 'second', foreground: true } },
-            { id: 2, title: dataPoint["femaleName"] + " legt het tweede ei van " + dataPoint["maleName"], trigger: { in: 20, unit: 'second', foreground: true } }
-        ]);
-        // alert("ALERT 2");
+            { id: idCountInt, title: dataPoint["femaleName"] + " legt het eerste ei van " + dataPoint["maleName"], trigger: { in: 10, unit: 'second', foreground: true } },
+            { id: idCountInt + 1, title: dataPoint["femaleName"] + " legt het tweede ei van " + dataPoint["maleName"], trigger: { in: 20, unit: 'second', foreground: true } },
+            { id: idCountInt + 2, title: "Het eerste ei van " + dataPoint["femaleName"] + " en " + dataPoint["maleName"] + " komt uit.", trigger: { in: 30, unit: 'second', foreground: true } },
+            { id: idCountInt + 3, title: "Het tweede ei van " + dataPoint["femaleName"] + " en " + dataPoint["maleName"] + " komt uit.", trigger: { in: 40, unit: 'second', foreground: true } }
+        ], function() {
+            // Increment last used ID
+            localStorage.idCount = (idCount + 1).toString();
+            // Go back to main page
+            window.open("./index.html", "_self");
+        });
     }
     catch(err) {
-        alert(err);
-    }
-    // Go back to main page
-    try {
+        alert("Kon geen notificaties inplannen. Stuur de volgende informatie naar de app ontwikkelaar: " + err);
+        // Increment last used ID
+        localStorage.idCount = (idCount + 1).toString();
+        // Go back to main page
         window.open("./index.html", "_self");
     }
-    catch(err) {
-        alert(err);
-    }
+
 }
 
 var app = {
