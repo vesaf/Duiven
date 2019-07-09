@@ -66,10 +66,10 @@ function loadData() {
 function removeCouple(coupleNo) {
     var localStorage = window.localStorage;
     delete localStorage[coupleNo];
-    cordova.plugins.notification.local.cancel(parseInt(coupleNo));
-    cordova.plugins.notification.local.cancel(parseInt(coupleNo) + 1);
-    cordova.plugins.notification.local.cancel(parseInt(coupleNo) + 2);
-    cordova.plugins.notification.local.cancel(parseInt(coupleNo) + 3);
+    cordova.plugins.notification.local.cancel(parseInt(coupleNo) * 4);
+    cordova.plugins.notification.local.cancel(parseInt(coupleNo) * 4 + 1);
+    cordova.plugins.notification.local.cancel(parseInt(coupleNo) * 4 + 2);
+    cordova.plugins.notification.local.cancel(parseInt(coupleNo) * 4 + 3);
     location.reload();
 }
 
