@@ -89,7 +89,7 @@ button {
 	cursor: pointer;
 }
 
-li {
+.card {
     padding: 8px 16px;
     width: 100%;
     border: 1px solid black;
@@ -104,16 +104,28 @@ table {
 
 ul {
     list-style-type: none;
+}
+
+#mainList {
     padding: 0;
     margin: -75px 0;
 }
 
-.header-button {
-	position: fixed;
-	right: 20px;
-	font-size: 25px;
-	top: 20px;
+.headerButton {
+	/* position: fixed; */
+	/* right: 20px; */
+	font-size: 48px;
+	/* top: 20px; */
     cursor: pointer;
+    padding: 10px;
+}
+
+#headerButtonContainer {
+    display: inline-block;
+    position: absolute;
+    top: 10px;
+    right: 0;
+    font-size: 20px;
 }
 
 h1 {
@@ -152,7 +164,7 @@ td {
     padding: 10px 16px;
 }
 
-.removeButton:hover, .editButton:hover {
+.removeButton:hover, .editButton:hover, .yearLabel:hover {
     cursor: pointer;
 }
 
@@ -233,4 +245,29 @@ td {
         margin-top: 10px;
         width: 129px;
     }
+}
+
+#filterMenu {
+    width: 110px;
+    position: fixed;
+    right: 5px;
+    max-height: 280px;
+    border: 1px solid black;
+    overflow-y: scroll;
+    background-color: #d1d1d1;
+}
+
+#filterMenu::-webkit-scrollbar {
+    display: none;
+}
+
+#filterList{
+    padding: 0 20px;
+    margin: 0;
+}
+
+.yearLabel {
+    color: black;
+    display: inline-block;
+    font-size: 15px;
 }

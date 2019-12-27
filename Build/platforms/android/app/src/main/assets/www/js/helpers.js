@@ -38,3 +38,48 @@ function addDays(date = new Date(), days) {
     result.setDate(result.getDate() + days);
     return result;
 }
+
+// Get the included seasons from the data
+function getYears(couples, cutoffDate) {
+    const ids = Object.keys(couples);
+    var years = [];
+    for (let i = 0; i < ids.length; i++) {
+        const id = ids[i];
+        const couple = couples[id];
+        const realCutoffDate = new Date(couple.date1.getYear() + 1900, cutoffDate.month  - 1, cutoffDate.day, 0, 0, 0, 0);
+        if (couple.date1 > realCutoffDate && years.indexOf(couple.date1.getYear() + 1901) === -1) {
+            years.push(couple.date1.getYear() + 1901);
+        }
+        else if (couple.date1 <= realCutoffDate && years.indexOf(couple.date1.getYear() + 1900) === -1) {
+            years.push(couple.date1.getYear() + 1900);
+        }
+    }
+    years.sort();
+    return years;
+}
+
+// Check if element or an ancestor has a given id
+function ancestorHasId(el, id) {
+    var outcome = (el.id === id);
+    while (el.parentElement && !outcome) {
+        el = el.parentElement;
+        outcome = (el.id === id);
+    }
+    return outcome;
+}
+
+// Gets the couple data from local storage
+function loadData() {
+    var localStorage = window.localStorage;
+    var maxIdCount = Number(localStorage.idCount);
+    var data = {couples: []};
+    for (var i = 0; i < maxIdCount; i++) {
+        if (localStorage[i.toString()]) {
+            var couple = JSON.parse(localStorage[i.toString()]);
+            couple.id = i;
+            couple.date1 = new Date(couple.date1);
+            data.couples.push(couple);
+        }
+    }
+    return data;
+}

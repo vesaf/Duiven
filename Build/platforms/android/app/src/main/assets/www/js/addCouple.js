@@ -7,8 +7,13 @@ function startAdd() {
 
     // When click on 'back' button go to index page
     document.addEventListener("click", function (e) {
-        if (hasClass(e.target, "header-button") || hasClass(e.target.parentElement, "header-button")) {
-            window.open("./index.html", "_self");
+        if (hasClass(e.target, "headerButton") || hasClass(e.target.parentElement, "headerButton")) {
+            if (e.target.id === "backButton" || e.target.parentElement.id === "backButton") {
+                window.open("./index.html", "_self");
+            }
+            else {
+                alert("Onbekende knop.")
+            }
         }
     });
 
@@ -51,24 +56,49 @@ function saveData(dataPoint) {
         var idCount = 0;
         localStorage.idCount = "0";
     }
+
+    // Also in index.js and editCouple.js
+    const cutoffDate = {
+        day: 10,
+        month: 12
+    }
+    var couples = loadData()["couples"];
+    var couplesExt = [...couples];
+    couplesExt[idCount] = dataPoint;
+    let newYear = getYears(couplesExt, cutoffDate).filter(x => !getYears(couples, cutoffDate).includes(x));
+    if (newYear.length > 0) {
+        var filtered = (localStorage.filtered) ? localStorage.filtered.split(",") : [];
+        filtered.push(newYear[0]);
+        localStorage.filtered = filtered;
+    }
+
     // Save couple at ID
     localStorage[idCount] =  JSON.stringify(dataPoint);
-    try {
-        const idCountInt = parseInt(idCount);
-        cordova.plugins.notification.local.schedule([
-            { id: idCountInt * 4, title: dataPoint["femaleName"] + " legt het eerste ei van " + dataPoint["maleName"], trigger: { in: 10, unit: 'second', foreground: true } },
-            { id: idCountInt * 4 + 1, title: dataPoint["femaleName"] + " legt het tweede ei van " + dataPoint["maleName"], trigger: { in: 20, unit: 'second', foreground: true } },
-            { id: idCountInt * 4 + 2, title: "Het eerste ei van " + dataPoint["femaleName"] + " en " + dataPoint["maleName"] + " komt uit.", trigger: { in: 30, unit: 'second', foreground: true } },
-            { id: idCountInt * 4 + 3, title: "Het jongen van " + dataPoint["femaleName"] + " en " + dataPoint["maleName"] + " moeten geringd worden.", trigger: { in: 40, unit: 'second', foreground: true } }
-        ], function() {
+    if (device.platform === "Android") {
+        try {
+            const idCountInt = parseInt(idCount);
+            // TODO: Turn on notifications
+            // cordova.plugins.notification.local.schedule([
+            //     { id: idCountInt * 4, title: dataPoint["femaleName"] + " legt het eerste ei van " + dataPoint["maleName"], trigger: { in: 10, unit: 'second', foreground: true } },
+            //     { id: idCountInt * 4 + 1, title: dataPoint["femaleName"] + " legt het tweede ei van " + dataPoint["maleName"], trigger: { in: 20, unit: 'second', foreground: true } },
+            //     { id: idCountInt * 4 + 2, title: "Het eerste ei van " + dataPoint["femaleName"] + " en " + dataPoint["maleName"] + " komt uit.", trigger: { in: 30, unit: 'second', foreground: true } },
+            //     { id: idCountInt * 4 + 3, title: "De jongen van " + dataPoint["femaleName"] + " en " + dataPoint["maleName"] + " moeten geringd worden.", trigger: { in: 40, unit: 'second', foreground: true } }
+            // ], function() {
+                // Increment last used ID
+                localStorage.idCount = (idCount + 1).toString();
+                // Go back to main page
+                window.open("./index.html", "_self");
+            // });
+        }
+        catch(err) {
+            alert("Kon geen notificaties inplannen. Stuur de volgende informatie naar de app ontwikkelaar: " + err);
             // Increment last used ID
             localStorage.idCount = (idCount + 1).toString();
             // Go back to main page
             window.open("./index.html", "_self");
-        });
+        }
     }
-    catch(err) {
-        alert("Kon geen notificaties inplannen. Stuur de volgende informatie naar de app ontwikkelaar: " + err);
+    else {
         // Increment last used ID
         localStorage.idCount = (idCount + 1).toString();
         // Go back to main page
@@ -98,9 +128,14 @@ var app = {
             //     title: 'Design team meeting',
             //     trigger: { in: 30, unit: 'second' }
             // });
-            cordova.plugins.notification.local.requestPermission(function (granted) {
+            if (device.platform === "Android") {
+                cordova.plugins.notification.local.requestPermission(function (granted) {
+                    startAdd();
+                });
+            }
+            else {
                 startAdd();
-            });
+            }
         }
     }
 };

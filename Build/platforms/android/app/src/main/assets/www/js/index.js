@@ -5,16 +5,29 @@
 // Handles page load event
 // document.addEventListener("DOMContentLoaded", function () {
 function startApp() {
+    // Start/end date of the breeding season (also in addCouple.js and editCouple.js)
+    const cutoffDate = {
+        day: 10,
+        month: 12
+    }
+
     // Get data from storage
     var data = loadData();
+    if (window.localStorage.filtered === undefined) {
+        console.log("Initiate filter");
+        window.localStorage.filtered = getYears(data["couples"], cutoffDate);
+    }
+
     if (Object.keys(data["couples"]).length > 0) {
         document.getElementById("container").innerHTML = "<input id='searchBar' placeholder='Zoeken'></input>" + document.getElementById("container").innerHTML;
         document.getElementById("searchBar").addEventListener("keyup", function (e) {
             const query = document.getElementById("searchBar").value;
-            const results = search(data["couples"], query);
+            const filtered = (window.localStorage.filtered) ? window.localStorage.filtered.split(",") : [];
+            const results = search(filter(data["couples"], filtered, cutoffDate), query);
             showData(results);
         });
-        showData(data["couples"]);
+        const filtered = (window.localStorage.filtered) ? window.localStorage.filtered.split(",") : [];
+        showData(filter(data["couples"], filtered, cutoffDate));
     }
     else {
         document.getElementById("container").innerHTML = "<p id='explanationText'> Klik rechts boven op het plusje om een koppel toe te voegen. </p>";
@@ -25,8 +38,16 @@ function startApp() {
     // Handles click events
 	document.addEventListener("click", function (e) {
         // Handles click on header add button
-		if (hasClass(e.target, "header-button") || hasClass(e.target.parentElement, "header-button")) {
-            window.open("./addCouple.html", "_self");
+		if (hasClass(e.target, "headerButton") || hasClass(e.target.parentElement, "headerButton")) {
+            if (e.target.id === "addButton" || e.target.parentElement.id === "addButton") {
+                window.open("./addCouple.html", "_self");
+            }
+            else if (e.target.id === "filterButton" || e.target.parentElement.id === "filterButton") {
+                loadFilterMenu(data["couples"], cutoffDate);
+            }
+            else {
+                alert("Onbekende knop.")
+            }
         }
         // Handles click on couple remove button
         if (hasClass(e.target, "removeButton") || hasClass(e.target.parentElement, "removeButton")) {
@@ -46,30 +67,14 @@ function startApp() {
 }
 // }, false);
 
-// Gets the couple data from local storage
-function loadData() {
-    var localStorage = window.localStorage;
-    var maxIdCount = Number(localStorage.idCount);
-    var data = {couples: []};
-    for (var i = 0; i < maxIdCount; i++) {
-        if (localStorage[i.toString()]) {
-            var couple = JSON.parse(localStorage[i.toString()]);
-            couple.id = i;
-            couple.date1 = new Date(couple.date1);
-            data.couples.push(couple);
-        }
-    }
-    return data;
-}
-
 // Removes a couple from local storage
 function removeCouple(coupleNo) {
     var localStorage = window.localStorage;
     delete localStorage[coupleNo];
-    cordova.plugins.notification.local.cancel(parseInt(coupleNo) * 4);
-    cordova.plugins.notification.local.cancel(parseInt(coupleNo) * 4 + 1);
-    cordova.plugins.notification.local.cancel(parseInt(coupleNo) * 4 + 2);
-    cordova.plugins.notification.local.cancel(parseInt(coupleNo) * 4 + 3);
+    // cordova.plugins.notification.local.cancel(parseInt(coupleNo) * 4);
+    // cordova.plugins.notification.local.cancel(parseInt(coupleNo) * 4 + 1);
+    // cordova.plugins.notification.local.cancel(parseInt(coupleNo) * 4 + 2);
+    // cordova.plugins.notification.local.cancel(parseInt(coupleNo) * 4 + 3);
     location.reload();
 }
 
@@ -105,7 +110,7 @@ function showData(couples) {
     var ids = Object.keys(couples);
     // Add couples to list
     for (let i = 0; i < ids.length; i++) {
-        id = ids[i];
+        id = ids[ids.length - i - 1];
         var couple = couples[id];
         // Set relevant dates and their html elements
         var date1 = couple.date1;
@@ -165,6 +170,81 @@ function showData(couples) {
         `;
     }
     document.getElementById("mainList").innerHTML = listContent;
+}
+
+function loadFilterMenu(couples, cutoffDate) {
+    var filtered = (window.localStorage.filtered) ? window.localStorage.filtered.split(",") : [];
+
+    var years = getYears(couples, cutoffDate);
+
+    var liItems = "";
+    for (let i = 0; i < years.length; i++) {
+        const year = years[i];
+        var checked = (filtered.indexOf(year.toString()) === -1) ? "" : "checked";
+        liItems += `
+        <li>
+            <input class="filterCheckbox" type="checkbox" id="checkbox` + year + `" ` + checked + `>
+            <p class="yearLabel" id="yearLabel` + year + `">` + year + `</p>
+        </li>
+        `;
+    }
+
+    if (liItems.length > 0) {
+        document.getElementById("headerButtonContainer").innerHTML += `
+            <div id="filterMenu">
+                <ul id="filterList">` +
+                    liItems +
+                `
+                </ul>
+            </div>
+        `;
+
+        document.addEventListener("click", filterClicks);
+    }
+
+    function filterClicks(e) {
+        if (!ancestorHasId(e.target, "filterMenu")) {
+            document.getElementById("filterMenu").parentElement.removeChild(document.getElementById("filterMenu"));
+            document.removeEventListener("click", filterClicks);
+        }
+        else if (e.target.id.substring(0, 8) === "checkbox" || hasClass(e.target, "yearLabel")) {
+            const year = e.target.id.slice(e.target.id.length - 4);
+            console.log(year);
+            if (hasClass(e.target, "yearLabel")) {
+                document.getElementById("checkbox" + year).checked = !document.getElementById("checkbox" + year).checked;
+            }
+            console.log(filtered);
+            if (filtered.indexOf(year) === -1) {
+                filtered.push(year)
+            }
+            else {
+                filtered.splice(filtered.indexOf(year), 1);
+            }
+            console.log(filtered);
+            window.localStorage.filtered = filtered;
+            showData(filter(couples, filtered, cutoffDate));
+        }
+    }
+}
+
+function filter(couples, years, cutoffDate) {
+    const cutoffDay = cutoffDate.day;
+    const cutoffMonth = cutoffDate.month;
+    const ids = Object.keys(couples);
+    var couplesOut = [];
+    for (let i = 0; i < ids.length; i++) {
+        for (let j = 0; j < years.length; j++) {
+            const id = ids[i];
+            var couple = couples[id];
+            const year = years[j];
+            const lowerBound = new Date(year - 1, cutoffMonth - 1, cutoffDay, 0, 0, 0, 0);
+            const upperBound = new Date(year, cutoffMonth - 1, cutoffDay, 0, 0, 0, 0);
+            if (couple.date1 > lowerBound && couple.date1 <= upperBound) {
+                couplesOut[id] = couple;
+            }
+        }
+    }
+    return couplesOut;
 }
 
 var app = {

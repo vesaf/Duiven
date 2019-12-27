@@ -7,8 +7,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Listen for click on header button (then go back to main page)
     document.addEventListener("click", function (e) {
-        if (hasClass(e.target, "header-button") || hasClass(e.target.parentElement, "header-button")) {
-            window.open("./index.html", "_self");
+        if (hasClass(e.target, "headerButton") || hasClass(e.target.parentElement, "headerButton")) {
+            if (e.target.id === "backButton" || e.target.parentElement.id === "backButton") {
+                window.open("./index.html", "_self");
+            }
+            else {
+                alert("Onbekende knop.")
+            }
         }
     });
 
@@ -148,6 +153,22 @@ function collectData() {
 // Saves data to db
 function saveData(dataPoint, id) {
     var localStorage = window.localStorage;
+
+    // Also in index.js and addCouple.js
+    const cutoffDate = {
+        day: 10,
+        month: 12
+    }
+    var couples = loadData()["couples"];
+    var couplesExt = [...couples];
+    couplesExt[id] = dataPoint;
+    let newYear = getYears(couplesExt, cutoffDate).filter(x => !getYears(couples, cutoffDate).includes(x));
+    if (newYear.length > 0) {
+        var filtered = (localStorage.filtered) ? localStorage.filtered.split(",") : [];
+        filtered.push(newYear[0]);
+        localStorage.filtered = filtered;
+    }
+
     localStorage[id] =  JSON.stringify(dataPoint);
     window.open("./index.html", "_self");
 }

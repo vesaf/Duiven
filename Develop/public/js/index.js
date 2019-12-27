@@ -43,17 +43,6 @@ function startApp() {
             window.open("./editCouple.html?id=" + coupleId, "_self");
         }
     });
-    
-    try {
-        cordova.plugins.notification.local.schedule({
-            title: 'My first notification',
-            text: 'Thats pretty easy...',
-            foreground: true
-        });
-    }
-    catch(err) {
-        alert(err);
-    }
 }
 // }, false);
 
@@ -77,6 +66,10 @@ function loadData() {
 function removeCouple(coupleNo) {
     var localStorage = window.localStorage;
     delete localStorage[coupleNo];
+    cordova.plugins.notification.local.cancel(parseInt(coupleNo) * 4);
+    cordova.plugins.notification.local.cancel(parseInt(coupleNo) * 4 + 1);
+    cordova.plugins.notification.local.cancel(parseInt(coupleNo) * 4 + 2);
+    cordova.plugins.notification.local.cancel(parseInt(coupleNo) * 4 + 3);
     location.reload();
 }
 
@@ -190,15 +183,12 @@ var app = {
 
     // Update DOM on a Received Event
     receivedEvent: function(id) {
-        console.log('Received Event: ' + id);
         if (id == 'deviceready') {
-            cordova.plugins.notification.local.schedule({
-                title: 'Test voor Vesa',
-                trigger: { in: 30, unit: 'second' }
-            });
             startApp();
         }
     }
 };
 
 app.initialize();
+document.addEventListener("DOMContentLoaded", startApp);
+// startApp();

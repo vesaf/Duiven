@@ -1,5 +1,6 @@
 // When page loaded
-document.addEventListener("DOMContentLoaded", function () {
+// document.addEventListener("DOMContentLoaded", function () {
+function startAdd() {
     // Put current date in date input field
     var dateInput = document.getElementById("dateInput");
     dateInput.value = formatDateToInput();
@@ -23,7 +24,8 @@ document.addEventListener("DOMContentLoaded", function () {
     form.addEventListener("submit", function () {
         return false;
     });
-}, false);
+}
+// }, false);
 
 // Create couple object with data from input and return to caller
 function collectData() {
@@ -51,8 +53,56 @@ function saveData(dataPoint) {
     }
     // Save couple at ID
     localStorage[idCount] =  JSON.stringify(dataPoint);
-    // Increment last used ID
-    localStorage.idCount = (idCount + 1).toString();
-    // Go back to main page
-    window.open("./index.html", "_self");
+    try {
+        const idCountInt = parseInt(idCount);
+        cordova.plugins.notification.local.schedule([
+            { id: idCountInt * 4, title: dataPoint["femaleName"] + " legt het eerste ei van " + dataPoint["maleName"], trigger: { in: 10, unit: 'second', foreground: true } },
+            { id: idCountInt * 4 + 1, title: dataPoint["femaleName"] + " legt het tweede ei van " + dataPoint["maleName"], trigger: { in: 20, unit: 'second', foreground: true } },
+            { id: idCountInt * 4 + 2, title: "Het eerste ei van " + dataPoint["femaleName"] + " en " + dataPoint["maleName"] + " komt uit.", trigger: { in: 30, unit: 'second', foreground: true } },
+            { id: idCountInt * 4 + 3, title: "Het jongen van " + dataPoint["femaleName"] + " en " + dataPoint["maleName"] + " moeten geringd worden.", trigger: { in: 40, unit: 'second', foreground: true } }
+        ], function() {
+            // Increment last used ID
+            localStorage.idCount = (idCount + 1).toString();
+            // Go back to main page
+            window.open("./index.html", "_self");
+        });
+    }
+    catch(err) {
+        alert("Kon geen notificaties inplannen. Stuur de volgende informatie naar de app ontwikkelaar: " + err);
+        // Increment last used ID
+        localStorage.idCount = (idCount + 1).toString();
+        // Go back to main page
+        window.open("./index.html", "_self");
+    }
+
 }
+
+var app = {
+    // Application Constructor
+    initialize: function() {
+        document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
+    },
+
+    // deviceready Event Handler
+    //
+    // Bind any cordova events here. Common events are:
+    // 'pause', 'resume', etc.
+    onDeviceReady: function() {
+        this.receivedEvent('deviceready');
+    },
+
+    // Update DOM on a Received Event
+    receivedEvent: function(id) {
+        if (id == 'deviceready') {
+            // cordova.plugins.notification.local.schedule({
+            //     title: 'Design team meeting',
+            //     trigger: { in: 30, unit: 'second' }
+            // });
+            cordova.plugins.notification.local.requestPermission(function (granted) {
+                startAdd();
+            });
+        }
+    }
+};
+
+app.initialize();

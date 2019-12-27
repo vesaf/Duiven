@@ -1,0 +1,17 @@
+{
+  "background_color": "#FFF",
+  "display": "standalone",
+  "name": "Duiven",
+  "short_name": "Duiven",
+  "version": "com.vesa.duiven",
+  "description": "App die helpt bij het fokken van duiven",
+  "author": "Vesa Frijling",
+  "icons": [
+    {
+      "src": "./res/icon/logo96.PNG",
+      "type": "image/png",
+      "sizes": "undefinedxundefined"
+    }
+  ],
+  "start_url": "index.html"
+}
