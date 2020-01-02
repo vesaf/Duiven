@@ -39,7 +39,8 @@ function startApp() {
 	document.addEventListener("click", function (e) {
         // Handles click on header add button
 		if (hasClass(e.target, "button") || hasClass(e.target.parentElement, "button")) {
-            if (e.target.id === "addButtonContainer" || e.target.parentElement.id === "addButtonContainer") {
+            if (e.target.id === "addButtonContainer" || e.target.parentElement.id === "addButtonContainer" || 
+			e.target.id === "addButton" || e.target.parentElement.id === "addButton") {
                 window.open("./addCouple.html", "_self");
             }
             else if (e.target.id === "filterButton" || e.target.parentElement.id === "filterButton") {
