@@ -22,14 +22,19 @@ function formatDateToString(date = new Date()) {
 
 // Formats date so it goes in a date input
 function formatDateToInput(date = new Date()) {
-    let month = String(date.getMonth() + 1);
-    let day = String(date.getDate());
-    const year = String(date.getFullYear());
+    if (date instanceof Date && !isNaN(date)) {
+        let month = String(date.getMonth() + 1);
+        let day = String(date.getDate());
+        const year = String(date.getFullYear());
 
-    if (month.length < 2) month = '0' + month;
-    if (day.length < 2) day = '0' + day;
+        if (month.length < 2) month = '0' + month;
+        if (day.length < 2) day = '0' + day;
 
-    return `${year}-${month}-${day}`;
+        return `${year}-${month}-${day}`;
+    }
+    else {
+        return null;
+    }
 }
 
 // Adds days to a given date

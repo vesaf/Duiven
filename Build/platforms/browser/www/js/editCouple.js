@@ -26,16 +26,18 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // Set checkboxes on date change
-    document.getElementById("dateInput").addEventListener("change", function () {
-        var date1 = new Date(document.getElementById("dateInput").value);
-        var today = new Date();
-        var date2 = addDays(date1, 2);
-        var date3 = addDays(date1, 18);
-        var date4 = addDays(date1, 25);
-        document.getElementById("egg2LayedCheckbox").checked = today >= date2;
-        document.getElementById("egg1DoneCheckbox").checked = today >= date3;
-        document.getElementById("egg2DoneCheckbox").checked = today >= date3;
-        document.getElementById("ringedCheckbox").checked = today >= date4;
+    document.getElementById("eggDateInput").addEventListener("change", function () {
+        var date1 = new Date(document.getElementById("eggDateInput").value);
+        if (date1 instanceof Date && !isNaN(date1)) {
+            var today = new Date();
+            var date2 = addDays(date1, 2);
+            var date3 = addDays(date1, 18);
+            var date4 = addDays(date1, 25);
+            document.getElementById("egg2LayedCheckbox").checked = today >= date2;
+            document.getElementById("egg1DoneCheckbox").checked = today >= date3;
+            document.getElementById("egg2DoneCheckbox").checked = today >= date3;
+            document.getElementById("ringedCheckbox").checked = today >= date4;
+        }
     });
 
     // Disable possible illogical checkbox combinations
@@ -79,18 +81,21 @@ function enterData(coupleData) {
 	}
     document.getElementById("maleNameInput").value = coupleData.maleName;
     document.getElementById("femaleNameInput").value = coupleData.femaleName;
-    document.getElementById("dateInput").value = formatDateToInput(coupleData.date1);
+    document.getDataFromDb("dateInput").value = formatDateToInput(coupleData.coupleDate);
+    document.getElementById("eggDateInput").value = formatDateToInput(coupleData.date1);
     document.getElementById("notesInput").value = coupleData.notes;
     var today = new Date();
     var date1 = coupleData.date1;
-    var date2 = addDays(date1, 2);
-    var date3 = addDays(date1, 18);
-    var date4 = addDays(date1, 25);
-    // Enter checkboxes first based on database then on date
-    document.getElementById("egg2LayedCheckbox").checked = (coupleData["egg2LayedAbn"] !== undefined) ? coupleData["egg2LayedAbn"] : today >= date2;
-    document.getElementById("egg1DoneCheckbox").checked = (coupleData["egg1DoneAbn"] !== undefined) ? coupleData["egg1DoneAbn"] : today >= date3;
-    document.getElementById("egg2DoneCheckbox").checked = (coupleData["egg2DoneAbn"] !== undefined) ? coupleData["egg2DoneAbn"] : today >= date3;
-    document.getElementById("ringedCheckbox").checked = (coupleData["ringedAbn"] !== undefined) ? coupleData["ringedAbn"] : today >= date4;
+    if (date1) {
+        var date2 = addDays(date1, 2);
+        var date3 = addDays(date1, 18);
+        var date4 = addDays(date1, 25);
+        // Enter checkboxes first based on database then on date
+        document.getElementById("egg2LayedCheckbox").checked = (coupleData["egg2LayedAbn"] !== undefined) ? coupleData["egg2LayedAbn"] : today >= date2;
+        document.getElementById("egg1DoneCheckbox").checked = (coupleData["egg1DoneAbn"] !== undefined) ? coupleData["egg1DoneAbn"] : today >= date3;
+        document.getElementById("egg2DoneCheckbox").checked = (coupleData["egg2DoneAbn"] !== undefined) ? coupleData["egg2DoneAbn"] : today >= date3;
+        document.getElementById("ringedCheckbox").checked = (coupleData["ringedAbn"] !== undefined) ? coupleData["ringedAbn"] : today >= date4;
+    }
 }
 
 // Collect data from inputs and return to caller
