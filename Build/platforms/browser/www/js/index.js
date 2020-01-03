@@ -30,7 +30,7 @@ function startApp() {
         showData(filter(data["couples"], filtered, cutoffDate));
     }
     else {
-        document.getElementById("container").innerHTML = "<p id='explanationText'> Klik rechts boven op het plusje om een koppel toe te voegen. </p>";
+        document.getElementById("container").innerHTML = "<p id='explanationText'> Klik rechts onder op het plusje om een koppel toe te voegen. </p>";
         
     }
    
@@ -38,8 +38,9 @@ function startApp() {
     // Handles click events
 	document.addEventListener("click", function (e) {
         // Handles click on header add button
-		if (hasClass(e.target, "headerButton") || hasClass(e.target.parentElement, "headerButton")) {
-            if (e.target.id === "addButton" || e.target.parentElement.id === "addButton") {
+		if (hasClass(e.target, "button") || hasClass(e.target.parentElement, "button")) {
+            if (e.target.id === "addButtonContainer" || e.target.parentElement.id === "addButtonContainer" || 
+			e.target.id === "addButton" || e.target.parentElement.id === "addButton") {
                 window.open("./addCouple.html", "_self");
             }
             else if (e.target.id === "filterButton" || e.target.parentElement.id === "filterButton") {
