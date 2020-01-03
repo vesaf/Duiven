@@ -80,12 +80,17 @@ input[type="checkbox"] {
 }
 
 button {
-	border: 1px solid #000000;
-	background-color: #d1d1d1;
+    width: 80%;
+    margin: auto;
+    display: block;
+	border: 0px;
+	background-color: #f54236;
 	box-shadow: none;
-	border-radius: 0px;
-	padding: 7px;
-	font: 1.2em;
+	border-radius: 12px;
+	padding: 12px;
+	font-size: 1.2em;
+	font-weight: bold;
+	color: #fff;
 	cursor: pointer;
 }
 
@@ -132,8 +137,8 @@ ul {
     position: fixed;
     bottom: 10px;
     right: 10px;
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
     background-color: #F54236;
     border-radius: 50%;
     box-shadow: 5px 5px 7px #888888;
@@ -141,10 +146,11 @@ ul {
 
 #addButton {
 	color: white;
-	margin-left: 4px;
+	margin-left: 9px;
+	margin-top: 6px;
 	font-size: 48px;
     cursor: pointer;
-    padding: 10px;
+    padding: 3px;
 }
 
 h1 {

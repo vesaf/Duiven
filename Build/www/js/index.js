@@ -30,7 +30,7 @@ function startApp() {
         showData(filter(data["couples"], filtered, cutoffDate));
     }
     else {
-        document.getElementById("container").innerHTML = "<p id='explanationText'> Klik rechts boven op het plusje om een koppel toe te voegen. </p>";
+        document.getElementById("container").innerHTML = "<p id='explanationText'> Klik rechts onder op het plusje om een koppel toe te voegen. </p>";
         
     }
    
