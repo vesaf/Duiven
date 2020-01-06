@@ -113,6 +113,9 @@ function collectData() {
     var coupleDate = new Date(document.getElementById("dateInput").value);
     var date1 = copyTimeToDate(new Date(document.getElementById("eggDateInput").value), today);
     var date2 = addDays(date1, 2);
+    date2.setHours(14);
+    date2.setMinutes(0);
+    date2.setSeconds(0);
     var date3 = addDays(date1, 18);
     var date4 = addDays(date1, 25);
     // Check for abnormalities in checkboxes and set boolean varibles accordingly
@@ -204,12 +207,15 @@ function updateNotifications(dataPoint, id, callback){
         if (date1) {
             date1 = new Date(date1);
             var date2 = addDays(date1, 2);
+            date2.setHours(14);
+            date2.setMinutes(0);
+            date2.setSeconds(0);
             var date3 = addDays(date1, 18);
             var date4 = addDays(date1, 25);
 
-            date2 = date1.setSeconds(date1.getSeconds() + 10);
-            date3 = date1.setSeconds(date1.getSeconds() + 10);
-            date4 = date1.setSeconds(date1.getSeconds() + 10);
+            // date2 = date1.setSeconds(date1.getSeconds() + 10);
+            // date3 = date1.setSeconds(date1.getSeconds() + 10);
+            // date4 = date1.setSeconds(date1.getSeconds() + 10);
             var notifications = [];
             if (date4 >= today) {
                 // notifications.push({ id: id * 4 + 3, title: "De jongen van " + dataPoint["femaleName"] + " en " + dataPoint["maleName"] + " moeten geringd worden.", trigger: { in: 40, unit: 'second', foreground: true } });

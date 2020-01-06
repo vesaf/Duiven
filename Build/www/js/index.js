@@ -27,7 +27,14 @@ function startApp() {
         });
         setInterval(function show() {
             const filtered = (window.localStorage.filtered) ? window.localStorage.filtered.split(",") : [];
-            showData(filter(data["couples"], filtered, cutoffDate));
+            if (document.getElementById("searchBar").value === "") {
+                showData(filter(data["couples"], filtered, cutoffDate));
+            }
+            else {
+                const query = document.getElementById("searchBar").value;
+                const results = search(filter(data["couples"], filtered, cutoffDate), query);
+                showData(results);
+            }
             return show;
         }(), 10000);
 
