@@ -111,6 +111,7 @@ label {
     margin: 3px 0;
     background-color: #d1d1d1;
     box-shadow: 0 1px 3px 0 rgba(0,0,0,0.16),0 1px 5px 0 rgba(0,0,0,0.12);
+    min-height: 130px;
 }
 
 table {
@@ -147,8 +148,8 @@ ul {
     position: fixed;
     bottom: 10px;
     right: 10px;
-    width: 60px;
-    height: 60px;
+    width: 55px;
+    height: 55px;
     background-color: #F54236;
     border-radius: 50%;
     box-shadow: 5px 5px 7px #888888;
@@ -156,8 +157,8 @@ ul {
 
 #addButton {
 	color: white;
-	margin-left: 9px;
-	margin-top: 6px;
+	margin-left: 7px;
+	margin-top: 4px;
 	font-size: 48px;
     cursor: pointer;
     padding: 3px;

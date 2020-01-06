@@ -14,7 +14,6 @@ function startApp() {
     // Get data from storage
     var data = loadData();
     if (window.localStorage.filtered === undefined) {
-        console.log("Initiate filter");
         window.localStorage.filtered = getYears(data["couples"], cutoffDate);
     }
 
@@ -26,8 +25,12 @@ function startApp() {
             const results = search(filter(data["couples"], filtered, cutoffDate), query);
             showData(results);
         });
-        const filtered = (window.localStorage.filtered) ? window.localStorage.filtered.split(",") : [];
-        showData(filter(data["couples"], filtered, cutoffDate));
+        setInterval(function show() {
+            const filtered = (window.localStorage.filtered) ? window.localStorage.filtered.split(",") : [];
+            showData(filter(data["couples"], filtered, cutoffDate));
+            return show;
+        }(), 10000);
+
     }
     else {
         document.getElementById("container").innerHTML = "<p id='explanationText'> Klik rechts onder op het plusje om een koppel toe te voegen. </p>";
@@ -114,51 +117,54 @@ function showData(couples) {
         id = ids[ids.length - i - 1];
         var couple = couples[id];
         // Set relevant dates and their html elements
+        // TODO: make sure all dates have copied time
         var date1 = couple.date1;
-        var date2 = addDays(date1, 2);
-        var date3 = addDays(date1, 18);
-        var date4 = addDays(date1, 25);
+        if (date1) {
+            var date2 = addDays(date1, 2);
+            var date3 = addDays(date1, 18);
+            var date4 = addDays(date1, 25);
+        }
         var today = new Date();
         today.setHours(0, 0, 0, 0);
         today.setDate(today.getDate() + 1);
-        var date1Icon = (today >= date1) ? '<i class="fa fa-check"></i>' : '<i class="far fa-clock"></i>';
-        var date2Checked = (couple["egg2LayedAbn"] !== undefined) ? couple["egg2LayedAbn"] : today >= date2;
+        var date1Icon = (date1 && today >= date1) ? '<i class="fa fa-check"></i>' : '<i class="far fa-clock"></i>';
+        var date2Checked = (couple["egg2LayedAbn"] !== undefined) ? couple["egg2LayedAbn"] : (date2 && today >= date2);
         var date2Icon = (date2Checked) ? '<i class="fa fa-check"></i>' : '<i class="far fa-clock"></i>';
         var date3Checked = (couple["egg1DoneAbn"] !== undefined|| couple["egg2DoneAbn"] !== undefined) ? couple["egg1DoneAbn"] && couple["egg2DoneAbn"] : today >= date3;
         var date3Icon = (date3Checked) ? '<i class="fa fa-check"></i>' : '<i class="far fa-clock"></i>';
         var date4Checked = (couple["ringedAbn"] !== undefined) ? couple["ringedAbn"] : today >= date4;
         var date4Icon = (date4Checked) ? '<i class="fa fa-check"></i>' : '<i class="far fa-clock"></i>';
-
-		const coupleHeader = (couple.bakNo) ? couple.bakNo + " " + couple.maleName + " & " + couple.femaleName : couple.maleName + " & " + couple.femaleName;
-		
+        const coupleHeader = (couple.bakNo) ? couple.bakNo + " " + couple.maleName + " & " + couple.femaleName : couple.maleName + " & " + couple.femaleName;
+        const dateInformation = (formatDateToString(date1) !== null) ? `
+        <table>
+            <tr>
+                <td class="date1Label"> Legdatum eerste ei: ` + formatDateToString(date1) + `</td>
+                <td>` + 
+                    date1Icon + `
+                </td>
+                <td class="date2Label"> Legdatum tweede ei: ` + formatDateToString(date2) + `</td>
+                <td>` +
+                    date2Icon + `
+                </td>
+            </tr>
+            <tr>
+                <td class="date3Label"> Uitkomst datum: ` + formatDateToString(date3) + `</td>
+                <td>` +
+                    date3Icon + `
+                </td>
+                <td class="date4Label"> Ringdatum: ` + formatDateToString(date4) + `</td>
+                <td>` +
+                    date4Icon + `
+                </td>
+            </tr>
+        </table>` : `<p>Er is nog geen legdatum bekend.</p>`;
         // Compile couple card html
         listContent += `
             <li class="card" id="couple` + couple.id + `">
                 <div class="listItem">
-                    <p class="coupleName">` + coupleHeader + `</p>
-                    <table>
-                        <tr>
-                            <td class="date1Label"> Legdatum eerste ei: ` + formatDateToString(date1) + `</td>
-                            <td>` + 
-                                date1Icon + `
-                            </td>
-                            <td class="date2Label"> Legdatum tweede ei: ` + formatDateToString(date2) + `</td>
-                            <td>` +
-                                date2Icon + `
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="date3Label"> Uitkomst datum: ` + formatDateToString(date3) + `</td>
-                            <td>` +
-                                date3Icon + `
-                            </td>
-                            <td class="date4Label"> Ringdatum: ` + formatDateToString(date4) + `</td>
-                            <td>` +
-                                date4Icon + `
-                            </td>
-                        </tr>
-                    </table>
-                    <div class="editButton">
+                    <p class="coupleName">` + coupleHeader + `</p>` +
+                    dateInformation +
+                    `<div class="editButton">
                         <i class="far fa-edit"></i>
                         <p class="editLabel">Bewerken</p> 
                     </div>
@@ -210,18 +216,15 @@ function loadFilterMenu(couples, cutoffDate) {
         }
         else if (e.target.id.substring(0, 8) === "checkbox" || hasClass(e.target, "yearLabel")) {
             const year = e.target.id.slice(e.target.id.length - 4);
-            console.log(year);
             if (hasClass(e.target, "yearLabel")) {
                 document.getElementById("checkbox" + year).checked = !document.getElementById("checkbox" + year).checked;
             }
-            console.log(filtered);
             if (filtered.indexOf(year) === -1) {
                 filtered.push(year)
             }
             else {
                 filtered.splice(filtered.indexOf(year), 1);
             }
-            console.log(filtered);
             window.localStorage.filtered = filtered;
             showData(filter(couples, filtered, cutoffDate));
         }
@@ -240,7 +243,8 @@ function filter(couples, years, cutoffDate) {
             const year = years[j];
             const lowerBound = new Date(year - 1, cutoffMonth - 1, cutoffDay, 0, 0, 0, 0);
             const upperBound = new Date(year, cutoffMonth - 1, cutoffDay, 0, 0, 0, 0);
-            if (couple.date1 > lowerBound && couple.date1 <= upperBound) {
+            // couple.coupleDate = new Date(couple.coupleDate);
+            if ((couple.coupleDate > lowerBound && couple.coupleDate <= upperBound)) {
                 couplesOut[id] = couple;
             }
         }

@@ -1,5 +1,5 @@
 // When page loaded
-document.addEventListener("DOMContentLoaded", function () {
+function startEdit () {
     // Load couple data
     var coupleData = getDataFromDb();
     // Enter couple data into inputs
@@ -26,16 +26,18 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // Set checkboxes on date change
-    document.getElementById("dateInput").addEventListener("change", function () {
-        var date1 = new Date(document.getElementById("dateInput").value);
-        var today = new Date();
-        var date2 = addDays(date1, 2);
-        var date3 = addDays(date1, 18);
-        var date4 = addDays(date1, 25);
-        document.getElementById("egg2LayedCheckbox").checked = today >= date2;
-        document.getElementById("egg1DoneCheckbox").checked = today >= date3;
-        document.getElementById("egg2DoneCheckbox").checked = today >= date3;
-        document.getElementById("ringedCheckbox").checked = today >= date4;
+    document.getElementById("eggDateInput").addEventListener("change", function () {
+        var date1 = new Date(document.getElementById("eggDateInput").value);
+        if (date1 instanceof Date && !isNaN(date1)) {
+            var today = new Date();
+            var date2 = addDays(date1, 2);
+            var date3 = addDays(date1, 18);
+            var date4 = addDays(date1, 25);
+            document.getElementById("egg2LayedCheckbox").checked = today >= date2;
+            document.getElementById("egg1DoneCheckbox").checked = today >= date3;
+            document.getElementById("egg2DoneCheckbox").checked = today >= date3;
+            document.getElementById("ringedCheckbox").checked = today >= date4;
+        }
     });
 
     // Disable possible illogical checkbox combinations
@@ -56,7 +58,7 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById("ringedCheckbox").disabled = false;
         }
     });
-}, false);
+}
 
 // Collect data from database
 function getDataFromDb() {
@@ -66,7 +68,15 @@ function getDataFromDb() {
     var id = window.location.search.substring(4);
     // Get ID's data from storage
     var coupleData = JSON.parse(localStorage[id]);
-    coupleData.date1 = new Date(coupleData.date1);
+    if (coupleData.date1 && !coupleData.coupleDate) {
+        coupleData.coupleDate = new Date(coupleData.date1);
+    }
+    else {
+        coupleData.coupleDate = new Date(coupleData.coupleDate);
+    }
+    if (coupleData.date1 !== null) {
+        coupleData.date1 = new Date(coupleData.date1);
+    }
     coupleData.id = id;
     return coupleData;
 }
@@ -79,25 +89,29 @@ function enterData(coupleData) {
 	}
     document.getElementById("maleNameInput").value = coupleData.maleName;
     document.getElementById("femaleNameInput").value = coupleData.femaleName;
-    document.getElementById("dateInput").value = formatDateToInput(coupleData.date1);
+    document.getElementById("dateInput").value = formatDateToInput(coupleData.coupleDate);
+    document.getElementById("eggDateInput").value = formatDateToInput(coupleData.date1);
     document.getElementById("notesInput").value = coupleData.notes;
     var today = new Date();
     var date1 = coupleData.date1;
-    var date2 = addDays(date1, 2);
-    var date3 = addDays(date1, 18);
-    var date4 = addDays(date1, 25);
-    // Enter checkboxes first based on database then on date
-    document.getElementById("egg2LayedCheckbox").checked = (coupleData["egg2LayedAbn"] !== undefined) ? coupleData["egg2LayedAbn"] : today >= date2;
-    document.getElementById("egg1DoneCheckbox").checked = (coupleData["egg1DoneAbn"] !== undefined) ? coupleData["egg1DoneAbn"] : today >= date3;
-    document.getElementById("egg2DoneCheckbox").checked = (coupleData["egg2DoneAbn"] !== undefined) ? coupleData["egg2DoneAbn"] : today >= date3;
-    document.getElementById("ringedCheckbox").checked = (coupleData["ringedAbn"] !== undefined) ? coupleData["ringedAbn"] : today >= date4;
+    if (date1) {
+        var date2 = addDays(date1, 2);
+        var date3 = addDays(date1, 18);
+        var date4 = addDays(date1, 25);
+        // Enter checkboxes first based on database then on date
+        document.getElementById("egg2LayedCheckbox").checked = (coupleData["egg2LayedAbn"] !== undefined) ? coupleData["egg2LayedAbn"] : today >= date2;
+        document.getElementById("egg1DoneCheckbox").checked = (coupleData["egg1DoneAbn"] !== undefined) ? coupleData["egg1DoneAbn"] : today >= date3;
+        document.getElementById("egg2DoneCheckbox").checked = (coupleData["egg2DoneAbn"] !== undefined) ? coupleData["egg2DoneAbn"] : today >= date3;
+        document.getElementById("ringedCheckbox").checked = (coupleData["ringedAbn"] !== undefined) ? coupleData["ringedAbn"] : today >= date4;
+    }
 }
 
 // Collect data from inputs and return to caller
 function collectData() {
     var dataPoint = {};
     var today = new Date();
-    var date1 = new Date(document.getElementById("dateInput").value);
+    var coupleDate = new Date(document.getElementById("dateInput").value);
+    var date1 = copyTimeToDate(new Date(document.getElementById("eggDateInput").value), today);
     var date2 = addDays(date1, 2);
     var date3 = addDays(date1, 18);
     var date4 = addDays(date1, 25);
@@ -145,9 +159,10 @@ function collectData() {
 	dataPoint["bakNo"] = document.getElementById("bakNoInput").value;
     dataPoint["maleName"] = document.getElementById("maleNameInput").value;
     dataPoint["femaleName"] = document.getElementById("femaleNameInput").value;
-    dataPoint["date1"] = new Date(document.getElementById("dateInput").value);
+    dataPoint["date1"] = date1;
+    dataPoint["coupleDate"] = coupleDate;
     dataPoint["notes"] = document.getElementById("notesInput").value;
-    return dataPoint
+    return dataPoint;
 }
 
 // Saves data to db
@@ -170,5 +185,87 @@ function saveData(dataPoint, id) {
     }
 
     localStorage[id] =  JSON.stringify(dataPoint);
-    window.open("./index.html", "_self");
+    updateNotifications(dataPoint, id, function() {
+        window.open("./index.html", "_self");
+    });
 }
+
+function updateNotifications(dataPoint, id, callback){
+    if (device.platform === "Android") {
+        id = parseInt(id);
+
+        cordova.plugins.notification.local.cancel(id * 4);
+        cordova.plugins.notification.local.cancel(id * 4 + 1);
+        cordova.plugins.notification.local.cancel(id * 4 + 2);
+        cordova.plugins.notification.local.cancel(id * 4 + 3);
+
+        const today = new Date();
+        var date1 = dataPoint.date1;
+        if (date1) {
+            date1 = new Date(date1);
+            var date2 = addDays(date1, 2);
+            var date3 = addDays(date1, 18);
+            var date4 = addDays(date1, 25);
+
+            date2 = date1.setSeconds(date1.getSeconds() + 10);
+            date3 = date1.setSeconds(date1.getSeconds() + 10);
+            date4 = date1.setSeconds(date1.getSeconds() + 10);
+            var notifications = [];
+            if (date4 >= today) {
+                // notifications.push({ id: id * 4 + 3, title: "De jongen van " + dataPoint["femaleName"] + " en " + dataPoint["maleName"] + " moeten geringd worden.", trigger: { in: 40, unit: 'second', foreground: true } });
+                notifications.push({ id: id * 4 + 3, title: "De jongen van " + dataPoint["femaleName"] + " en " + dataPoint["maleName"] + " moeten geringd worden.", trigger: { at: date4, foreground: true } });
+                if (date3 >= today) {
+                    notifications.push({ id: id * 4 + 2, title: "Het eerste ei van " + dataPoint["femaleName"] + " en " + dataPoint["maleName"] + " komt uit.", trigger: { at: date3, foreground: true } });
+                    if (date2 >= today) {
+                        notifications.push({ id: id * 4 + 1, title: dataPoint["femaleName"] + " legt het tweede ei van " + dataPoint["maleName"], trigger: { at: date2, foreground: true } });
+                        // if (date1 >= today) {
+                        //     notifications.push({ id: id * 4, title: dataPoint["femaleName"] + " legt het eerste ei van " + dataPoint["maleName"], trigger: { in: 10, unit: 'second', foreground: true } })
+                        // }
+                    }
+                }
+            }
+            cordova.plugins.notification.local.schedule(notifications, callback);
+        }
+        else {
+            callback();
+        }
+    }
+    else {
+        callback();
+    }
+}
+
+var app = {
+    // Application Constructor
+    initialize: function() {
+        document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
+    },
+
+    // deviceready Event Handler
+    //
+    // Bind any cordova events here. Common events are:
+    // 'pause', 'resume', etc.
+    onDeviceReady: function() {
+        this.receivedEvent('deviceready');
+    },
+
+    // Update DOM on a Received Event
+    receivedEvent: function(id) {
+        if (id == 'deviceready') {
+            // cordova.plugins.notification.local.schedule({
+            //     title: 'Design team meeting',
+            //     trigger: { in: 30, unit: 'second' }
+            // });
+            if (device.platform === "Android") {
+                cordova.plugins.notification.local.requestPermission(function (granted) {
+                    startEdit();
+                });
+            }
+            else {
+                startEdit();
+            }
+        }
+    }
+};
+
+app.initialize();

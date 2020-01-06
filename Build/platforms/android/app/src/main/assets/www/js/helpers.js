@@ -9,27 +9,37 @@ function hasClass (element, className) {
 }
 
 // Formats a date into standard European string format
-function formatDateToString(date = new Date()) {
-    let month = String(date.getMonth() + 1);
-    let day = String(date.getDate());
-    const year = String(date.getFullYear());
-  
-    if (month.length < 2) month = '0' + month;
-    if (day.length < 2) day = '0' + day;
-  
-    return `${day}/${month}/${year}`;
+function formatDateToString(date) {
+    if (date instanceof Date && !isNaN(date)) {
+        let month = String(date.getMonth() + 1);
+        let day = String(date.getDate());
+        const year = String(date.getFullYear());
+    
+        if (month.length < 2) month = '0' + month;
+        if (day.length < 2) day = '0' + day;
+    
+        return `${day}/${month}/${year}`;
+    }
+    else {
+        return null;
+    }
 }
 
 // Formats date so it goes in a date input
 function formatDateToInput(date = new Date()) {
-    let month = String(date.getMonth() + 1);
-    let day = String(date.getDate());
-    const year = String(date.getFullYear());
+    if (date instanceof Date && !isNaN(date)) {
+        let month = String(date.getMonth() + 1);
+        let day = String(date.getDate());
+        const year = String(date.getFullYear());
 
-    if (month.length < 2) month = '0' + month;
-    if (day.length < 2) day = '0' + day;
+        if (month.length < 2) month = '0' + month;
+        if (day.length < 2) day = '0' + day;
 
-    return `${year}-${month}-${day}`;
+        return `${year}-${month}-${day}`;
+    }
+    else {
+        return null;
+    }
 }
 
 // Adds days to a given date
@@ -46,16 +56,21 @@ function getYears(couples, cutoffDate) {
     for (let i = 0; i < ids.length; i++) {
         const id = ids[i];
         const couple = couples[id];
-        const realCutoffDate = new Date(couple.date1.getYear() + 1900, cutoffDate.month  - 1, cutoffDate.day, 0, 0, 0, 0);
-        if (couple.date1 > realCutoffDate && years.indexOf(couple.date1.getYear() + 1901) === -1) {
-            years.push(couple.date1.getYear() + 1901);
+        couple.coupleDate = new Date(couple.coupleDate);
+        const realCutoffDate = new Date(couple.coupleDate.getYear() + 1900, cutoffDate.month  - 1, cutoffDate.day, 0, 0, 0, 0);
+        if (couple.coupleDate > realCutoffDate && years.indexOf(couple.coupleDate.getYear() + 1901) === -1) {
+            years.push(couple.coupleDate.getYear() + 1901);
         }
-        else if (couple.date1 <= realCutoffDate && years.indexOf(couple.date1.getYear() + 1900) === -1) {
-            years.push(couple.date1.getYear() + 1900);
+        else if (couple.coupleDate <= realCutoffDate && years.indexOf(couple.coupleDate.getYear() + 1900) === -1) {
+            years.push(couple.coupleDate.getYear() + 1900);
         }
     }
     years.sort();
     return years;
+}
+
+function copyTimeToDate(target, time) {
+    return new Date(target.getFullYear(), target.getMonth(), target.getDate(), time.getHours(), time.getMinutes(), time.getSeconds());
 }
 
 // Check if element or an ancestor has a given id
@@ -77,7 +92,16 @@ function loadData() {
         if (localStorage[i.toString()]) {
             var couple = JSON.parse(localStorage[i.toString()]);
             couple.id = i;
-            couple.date1 = new Date(couple.date1);
+            // Test to support legacy code
+            if (couple.date1) {
+                if (!couple.coupleDate) {
+                    couple.coupleDate = new Date(couple.date1);
+                }
+                couple.date1 = new Date(couple.date1);
+            }
+            if (couple.coupleDate) {
+                couple.coupleDate = new Date(couple.coupleDate);
+            }
             data.couples.push(couple);
         }
     }

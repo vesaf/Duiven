@@ -38,7 +38,8 @@ function collectData() {
 	dataPoint["bakNo"] = document.getElementById("bakNoInput").value;
     dataPoint["maleName"] = document.getElementById("maleNameInput").value;
     dataPoint["femaleName"] = document.getElementById("femaleNameInput").value;
-    dataPoint["date1"] = new Date(document.getElementById("dateInput").value);
+    dataPoint["coupleDate"] = new Date(document.getElementById("dateInput").value);
+//    dataPoint["date1"] = new Date(document.getElementById("dateInput").value);
     dataPoint["notes"] = document.getElementById("notesInput").value;
     return dataPoint;
 }
